@@ -1,0 +1,10 @@
+---
+- name: Collecting Facts
+  hosts: localhost
+  gather_facts: yes
+
+- name: Set up local dev environment
+  hosts: localhost
+  roles:
+    - packages
+    - node

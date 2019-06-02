@@ -1,0 +1,12 @@
+- import_tasks: fedora.yml
+  when: ansible_pkg_mgr == "dnf"
+
+- import_tasks: redhat.yml
+  when: ansible_pkg_mgr == "yum"
+
+- import_tasks: ubuntu.yml
+  when: ansible_os_family == "Debian"
+
+- import_tasks: macos.yml
+  when: ansible_os_family == "Darwin"
+
