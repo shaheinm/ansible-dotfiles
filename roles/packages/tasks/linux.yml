@@ -1,0 +1,28 @@
+- name: Use python3 interpreter for Ansible on Fedora
+  include_vars: "Fedora.yml"
+  when:
+    - ansible_distribution == "Fedora"
+    - ansible_distribution_major_version == "30"
+
+- name: Make sure package manager is up to date
+  package:
+    name: '*'
+    state: latest
+  become: yes
+
+- name: Install packages
+  package:
+    name:
+      - golang
+      - git
+      - nginx
+      - neovim
+      - python3-neovim
+      - fzf
+      - ripgrep
+      - python3
+      - maven
+      - awscli
+      - jq
+    state: latest
+  become: yes

@@ -1,0 +1,26 @@
+- name: Update Homebrew
+  homebrew:
+    update_homebrew: yes
+
+- name: Upgrade existing packages
+  homebrew:
+    update_all: yes
+
+- name: Install packages
+  homebrew:
+    name:
+      - golang
+      - git
+      - nginx
+      - neovim
+      - fzf
+      - ripgrep
+      - maven
+      - awscli
+      - openssl
+      - bash
+      - ack
+      - python3
+      - python
+      - jq
+    state: latest
