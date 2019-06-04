@@ -21,7 +21,7 @@
       - bash
       - ack
       - python3
-      - python
+      - python2
       - jq
       - htop
       - wget

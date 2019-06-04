@@ -21,6 +21,7 @@
       - fzf
       - ripgrep
       - python3
+      - python2
       - maven
       - awscli
       - jq
