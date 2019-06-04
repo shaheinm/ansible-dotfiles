@@ -4,7 +4,7 @@
 
 - name: Upgrade existing packages
   homebrew:
-    update_all: yes
+    upgrade_all: yes
 
 - name: Install packages
   homebrew:
