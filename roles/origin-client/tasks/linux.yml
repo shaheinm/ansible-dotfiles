@@ -1,0 +1,7 @@
+- name: Install origin-clients on Linux
+  package:
+    name:
+      - origin-clients
+    state: latest
+  become: yes
+

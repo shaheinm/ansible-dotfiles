@@ -1,12 +1,27 @@
-- import_tasks: fedora.yml
-  when: ansible_pkg_mgr == "dnf"
+- name: Use python3 interpreter for Ansible on Fedora
+  include_vars: "Fedora.yml"
+  when:
+    - ansible_distribution == "Fedora"
+    - ansible_distribution_major_version == "30"
 
-- import_tasks: redhat.yml
-  when: ansible_pkg_mgr == "yum"
+- name: Make sure package manager is up to date
+  package:
+    name: '*'
+    state: latest
+  become: yes
 
-- import_tasks: ubuntu.yml
-  when: ansible_os_family == "Debian"
-
-- import_tasks: macos.yml
-  when: ansible_os_family == "Darwin"
-
+- name: Install packages
+  package:
+    name:
+      - golang
+      - git
+      - nginx
+      - neovim
+      - python3-neovim
+      - fzf
+      - ripgrep
+      - python3
+      - maven
+      - awscli
+    state: latest
+  become: yes
