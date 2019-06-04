@@ -1,8 +1,13 @@
 - name: Collecting Facts
-  hosts: localhost
+  hosts: local
   gather_facts: yes
 
 - name: Set up local dev environment
-  hosts: localhost
+  hosts: local
   roles:
-    - packages
+    - { role: packages, tags: ['packages', 'bootstrap'] }
+    - { role: git, tags: ['git', 'bootstrap'] }
+    - { role: nvim, tags: [ 'nvim', 'bootstrap'] }
+    - { role: node, tags: ['node'] }
+    - { role: origin-client, tags: ['oc'] }
+    - { role: kube, tags: ['kube'] }

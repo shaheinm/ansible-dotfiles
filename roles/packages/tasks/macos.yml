@@ -23,4 +23,16 @@
       - python3
       - python
       - jq
+      - htop
+      - wget
+      - curl
+      - ctags-exuberant
     state: latest
+
+- name: Cask install essential packages
+  homebrew_cask:
+    name:
+      - firefox
+      - google-chrome
+      - iterm2
+      - slack

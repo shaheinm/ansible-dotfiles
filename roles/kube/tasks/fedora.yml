@@ -1,0 +1,33 @@
+- name: Installing pre-reqs for Minikube
+  dnf:
+    name:
+      - '@virtualization'
+    state: latest
+  become: yes
+
+- name: Ensure libvirt group exists
+  group:
+    name: libvirt
+    state: present
+
+- name: Add user to libvirt group
+  user:
+    name: "{{ username }}"
+    group: libvirt
+    append: yes
+  become: yes
+
+- name: Install Docker Machine
+  get_url:
+    url: https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-Linux-x86_64
+    dest: /usr/local/bin/docker-machine
+    mode: +x
+  become: yes
+
+- name: Install Docker Machine KVM Driver
+  get_url:
+    url: https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.10.0/docker-machine-driver-kvm-centos7
+    dest: /usr/local/bin/docker-machine-driver-kvm
+    mode: +x
+  become: yes
+

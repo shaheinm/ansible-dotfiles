@@ -1,0 +1,11 @@
+- name: Install Virtualbox, Docker Machine, and Minikube
+  homebrew_cask:
+    name:
+      - virtualbox
+      - virtualbox-extension-pack
+      - docker-toolbox
+      - minikube
+    state: latest
+
+
+

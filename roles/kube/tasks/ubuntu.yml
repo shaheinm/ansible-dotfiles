@@ -1,0 +1,8 @@
+- name: Use VirtualBox on Ubuntu
+  apt:
+    name:
+      - virtualbox
+      - virtualbox-ext-pack
+    state: latest
+  become: yes
+

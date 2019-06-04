@@ -24,5 +24,6 @@
       - maven
       - awscli
       - jq
+      - ctags
     state: latest
   become: yes

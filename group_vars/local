@@ -1,0 +1,19 @@
+dotfiles_user_home: "{{ '~' | expanduser }}"
+dotfiles_home: "{{ dotfiles_user_home }}/dev/ansible-dotfiles"
+
+full_name: Shahein Moussavi
+username: shaheinm
+
+git_email: shaheinm@gmail.com
+
+vim_install_plugins: no
+
+python3_mac: "/usr/local/bin/python3"
+python2_mac: "/usr/local/bin/python2"
+
+python3_linux: "/usr/bin/python3"
+python2_linux: "/usr/bin/python2"
+
+editor_mac: "/usr/local/bin/nvim"
+editor_linux: "/usr/bin/nvim"
+

@@ -1,0 +1,14 @@
+- import_tasks: fedora.yml
+  when: ansible_facts['distribution'] == "Fedora"
+
+- import_tasks: ubuntu.yml
+  when: ansible_facts['distribution'] == "Ubuntu"
+
+- name: Download and install minikube
+  get_url:
+    url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    dest: /usr/local/bin/minikube
+    mode: +x
+  become: yes
+
+
