@@ -1,34 +1,34 @@
 - name: Link init.vim
   file:
     src: "{{ dotfiles_home }}/roles/nvim/templates/initvim.j2"
-    dest: "{{ dotfiles_user_home }}/.config/nvim/init.vim"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/init.vim"
     state: link
     force: yes
 
 - name: Link plugin folder
   template:
     src: "{{ dotfiles_home }}/roles/nvim/files/plugin.link"
-    dest: "{{dotfiles_user_home}}/.config/nvim/plugin"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/plugin"
     state: link
     force: yes
 
 - name: Link indent folder
   file:
     src: "{{ dotfiles_home }}/roles/nvim/files/indent.link"
-    dest: "{{ dotfiles_user_home }}/.config/nvim/indent"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/indent"
     state: link
     force: yes
 
 - name: Link ftplugin folder
   file:
     src: "{{ dotfiles_home }}/roles/nvim/files/ftplugin.link"
-    dest: "{{ dotfiles_user_home }}/.config/nvim/ftplugin"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/ftplugin"
     state: link
     force: yes
 
 - name: Link syntax folder
   file:
     src: "{{ dotfiles_home }}/roles/nvim/files/syntax.link"
-    dest: "{{ dotfiles_user_home }}/.config/nvim/syntax"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/syntax"
     state: link
     force: yes

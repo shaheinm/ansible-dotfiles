@@ -1,36 +1,37 @@
 - name: Link global gitignore
   file:
     src: "{{ dotfiles_home }}/roles/git/files/gitignore_global.link"
-    dest: "{{ dotfiles_user_home }}/.gitignore_global"
+    dest: "{{ ansible_env.HOME }}/.gitignore_global"
     state: link
     force: yes
 
 - name: Check if gitconfig exists
-  stat: path="{{dotfiles_user_home}}/.gitconfig"
+  stat:
+    path: "{{ ansible_env.HOME }}/.gitconfig"
   register: gitconfig_stat
 
 - name: Back up gitconfig
   command: mv ~/.gitconfig ~/.gitconfig.bak
   args:
-    creates: "{{dotfiles_user_home}}/.gitconfig.bak"
+    creates: "{{ ansible_env.HOME }}/.gitconfig.bak"
   when: gitconfig_stat.stat.exists
 
 - name: Make sure gitconfig is up to date
   template:
     src: "gitconfig.j2"
-    dest: "{{dotfiles_user_home}}/.gitconfig"
+    dest: "{{ ansible_env.HOME }}/.gitconfig"
 
 - name: Link diff-so-fancy
   file:
     src: "{{ dotfiles_home }}/roles/git/files/diff-so-fancy.link"
-    dest: "{{ dotfiles_user_home }}/bin/diff-so-fancy"
+    dest: "{{ ansible_env.HOME }}/bin/diff-so-fancy"
     state: link
     force: yes
 
 - name: Link githelpers
   file:
     src: "{{ dotfiles_home }}/roles/git/files/githelpers.link"
-    dest: "{{ dotfiles_user_home }}/git/githelpers"
+    dest: "{{ ansible_env.HOME }}/git/githelpers"
     state: link
     force: yes
 
