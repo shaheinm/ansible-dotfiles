@@ -1,12 +1,11 @@
 - name: Link init.vim
-  file:
+  template:
     src: "{{ dotfiles_home }}/roles/nvim/templates/initvim.j2"
     dest: "{{ ansible_env.HOME }}/.config/nvim/init.vim"
-    state: link
     force: yes
 
 - name: Link plugin folder
-  template:
+  file:
     src: "{{ dotfiles_home }}/roles/nvim/files/plugin.link"
     dest: "{{ ansible_env.HOME }}/.config/nvim/plugin"
     state: link

@@ -127,6 +127,7 @@ call plug#begin()
 
 " UI
 Plug 'shaheinm/vim-deus'
+Plug 'fenetikm/falcon'
 Plug 'mhinz/vim-startify'
 Plug 'vim-airline/vim-airline'            " Handy info
 Plug 'vim-airline/vim-airline-themes'            " Handy info
@@ -255,6 +256,7 @@ nmap <F6> <Plug>(JavaComplete-Imports-AddMissing)
 imap <F6> <Plug>(JavaComplete-Imports-AddMissing)
 nmap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
 imap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
+let g:JavaComplete_ClasspathGenerationOrder = ['Maven']
 "
 
 " Section: Remaps
@@ -338,12 +340,13 @@ set termguicolors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set background=dark
-colorscheme deus
+colorscheme falcon
 let g:deus_termcolors=256
 
 hi Folded ctermbg=NONE guibg=NONE ctermfg=014 guifg=#0087d7
 " Airline theme
-let g:airline_theme='deus'
+let g:falcon_airline=1
+let g:airline_theme='falcon'
 
 " Section: Local-Machine Config
 
