@@ -8,8 +8,9 @@
     creates: "{{ ansible_env.HOME }}/.zshrc.bak"
   when: bashrc_stat.stat.exists
 
-- name: Copy bashrc
-  copy:
+- name: Link bashrc
+  file:
     src: "{{ dotfiles_home }}/roles/bash/files/bashrc.link"
     dest: "{{ ansible_env.HOME }}/.bashrc"
+    state: link
 
