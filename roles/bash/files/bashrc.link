@@ -1,0 +1,56 @@
+# .bashrc
+export GOPATH=/home/shaheinm/go
+export CLICOLOR=1
+export TERM=xterm-256color
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
+then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+if [[ -f ~/.aliases ]]; then
+  source ~/.aliases
+fi
+
+alias vi=nvim
+alias vim=nvim
+
+if [[ -f ~/.fzf.bash ]]; then
+  source ~/.fzf.bash
+  export FZF_DEFAULT_OPTS='--color 16,info:6,hl:13,hl+:13'
+  export FZF_DEFAULT_COMMAND="rg --files-with-matches --no-messages -F ''"
+  export FZF_CTRL_T_COMMAND="rg --files-with-matches --no-messages --hidden -F '' | grep -v .git/"
+  export FZF_ALT_C_COMMAND="bfs -type d -nohidden"
+  bind -x '"\C-l": "vi $(fzf)"'
+fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWCOLORHINTS=1
+export GIT_PS1_SHOWUPSTREAM="auto"
+
+source /usr/share/git-core/contrib/completion/git-prompt.sh
+function custom_prompt() {
+  __git_ps1 "\e[38;5;73m[\u@\h \W]\e[0m" "\n$ "
+  VTW_PWD_THING="\[$(__vte_osc7)]"
+  PS1="$PS1$VTE_PWD_THING"
+}
+PROMPT_COMMAND=custom_prompt
+
+export PATH=/home/shaheinm/istio-1.1.7/bin:$PATH
+
