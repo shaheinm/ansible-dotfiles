@@ -5,6 +5,7 @@
 - name: Set up local dev environment
   hosts: local
   roles:
+    - { role: bash, tags: ['bash', 'bootstrap'] }
     - { role: packages, tags: ['packages', 'bootstrap'] }
     - { role: git, tags: ['git', 'bootstrap'] }
     - { role: nvim, tags: [ 'nvim', 'bootstrap'] }

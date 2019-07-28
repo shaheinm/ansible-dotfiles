@@ -1,4 +1,4 @@
-dotfiles_home: "{{ dotfiles_user_home }}/dev/ansible-dotfiles"
+dotfiles_home: "{{ ansible_env.HOME }}/dev/ansible-dotfiles"
 
 full_name: Shahein Moussavi
 username: shaheinm
