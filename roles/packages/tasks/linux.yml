@@ -26,5 +26,6 @@
       - awscli
       - jq
       - ctags
+      - podman
     state: latest
   become: yes
