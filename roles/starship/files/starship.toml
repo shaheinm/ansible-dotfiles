@@ -1,0 +1,78 @@
+# Two-line prompt: directory + git + context on first line, prompt on second
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$python\
+$golang\
+$rust\
+$nodejs\
+$aws\
+$line_break\
+$character"""
+
+# Prompt character
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+
+# Directory - show 3 levels, truncate to repo root
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+style = "bold cyan"
+
+# Git branch
+[git_branch]
+symbol = ""
+format = "[$symbol$branch]($style) "
+style = "bold purple"
+
+# Git status - compact
+[git_status]
+format = '([$all_status$ahead_behind]($style))'
+style = "bold red"
+
+# Language versions - compact format, only show when in project
+[python]
+symbol = " "
+format = '[${symbol}${version}]($style) '
+style = "yellow"
+
+[golang]
+symbol = " "
+format = '[${symbol}${version}]($style) '
+style = "cyan"
+
+[rust]
+symbol = " "
+format = '[${symbol}${version}]($style) '
+style = "red"
+
+[nodejs]
+symbol = " "
+format = '[${symbol}${version}]($style) '
+style = "green"
+
+# AWS context
+[aws]
+symbol = " "
+format = '[$symbol($profile)(\($region\))]($style) '
+style = "bold orange"
+
+# Disabled
+[kubernetes]
+disabled = true
+
+[cmd_duration]
+disabled = true
+
+[package]
+disabled = true
+
+[docker_context]
+disabled = true
+
+[gcloud]
+disabled = true

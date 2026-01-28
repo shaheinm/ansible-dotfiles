@@ -1,31 +1,89 @@
+---
 - name: Use python3 interpreter for Ansible on Fedora
   include_vars: "Fedora.yml"
   when:
     - ansible_distribution == "Fedora"
-    - ansible_distribution_major_version == "30"
 
-- name: Make sure package manager is up to date
+- name: Update package manager
   package:
     name: '*'
     state: latest
   become: yes
 
-- name: Install packages
-  package:
+- name: Install core packages (Debian/Ubuntu)
+  apt:
     name:
-      - golang
+      # Core tools
       - git
-      - nginx
       - neovim
-      - python3-neovim
       - fzf
       - ripgrep
-      - python3
-      - python2
-      - maven
-      - awscli
+      - fd-find
       - jq
-      - ctags
+      - htop
+      - wget
+      - curl
+
+      # Zsh plugins
+      - zsh-syntax-highlighting
+      - zsh-autosuggestions
+
+      # Languages
+      - golang
+      - python3
+      - python3-pip
+      - nodejs
+      - npm
+
+      # Cloud/Container
+      - awscli
       - podman
-    state: latest
+    state: present
+  become: yes
+  when: ansible_os_family == "Debian"
+
+- name: Install core packages (Fedora/RHEL)
+  dnf:
+    name:
+      # Core tools
+      - git
+      - neovim
+      - fzf
+      - ripgrep
+      - fd-find
+      - jq
+      - htop
+      - wget
+      - curl
+
+      # Languages
+      - golang
+      - python3
+      - python3-pip
+      - nodejs
+      - npm
+
+      # Cloud/Container
+      - awscli
+      - podman
+    state: present
+  become: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Install starship prompt
+  shell: |
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    creates: /usr/local/bin/starship
+  become: yes
+
+- name: Install lazygit
+  shell: |
+    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    tar xf lazygit.tar.gz lazygit
+    install lazygit /usr/local/bin
+    rm lazygit lazygit.tar.gz
+  args:
+    creates: /usr/local/bin/lazygit
   become: yes

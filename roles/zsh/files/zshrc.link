@@ -99,7 +99,11 @@ if [[ -f ~/.fzf.zsh ]]; then
 fi
 
 # -- asdf (single version manager) ---------------------------------------------
-if [[ -d "$HOME/.asdf" ]]; then
+# Homebrew installation (macOS)
+if [[ -f "$(brew --prefix asdf 2>/dev/null)/libexec/asdf.sh" ]]; then
+  source "$(brew --prefix asdf)/libexec/asdf.sh"
+# Git clone installation (Linux or manual)
+elif [[ -d "$HOME/.asdf" ]]; then
   source "$HOME/.asdf/asdf.sh"
   fpath=(${ASDF_DIR}/completions $fpath)
 fi

@@ -1,0 +1,48 @@
+---
+# =============================================================================
+# macOS Work-Specific Packages
+# =============================================================================
+# These packages are specific to work infrastructure and shouldn't be
+# installed on personal machines.
+#
+# Run with: ansible-playbook -i hosts playbook.yml --tags "packages-work"
+# =============================================================================
+
+- name: Install Kubernetes tools
+  homebrew:
+    name:
+      - kubernetes-cli   # kubectl
+      - kubectx          # Context/namespace switching
+      - helm             # Kubernetes package manager
+    state: present
+
+- name: Install cloud CLI tools
+  homebrew:
+    name:
+      - awscli           # AWS CLI
+      - fastly           # Fastly CDN CLI
+    state: present
+
+- name: Install infrastructure tools
+  homebrew:
+    name:
+      - cfn-lint         # CloudFormation linter
+      - ansible          # Configuration management
+    state: present
+
+- name: Install backend development tools
+  homebrew:
+    name:
+      - postgresql@14    # PostgreSQL database
+      - rabbitmq         # Message queue
+    state: present
+  ignore_errors: yes
+
+# Optional: Start services if needed
+# - name: Start PostgreSQL service
+#   shell: brew services start postgresql@14
+#   ignore_errors: yes
+
+# - name: Start RabbitMQ service
+#   shell: brew services start rabbitmq
+#   ignore_errors: yes

@@ -1,0 +1,13 @@
+---
+- name: Ensure config directory exists
+  file:
+    path: "{{ config_home }}"
+    state: directory
+    mode: '0755'
+
+- name: Link starship config
+  file:
+    src: "{{ dotfiles_home }}/roles/starship/files/starship.toml"
+    dest: "{{ config_home }}/starship.toml"
+    state: link
+    force: yes

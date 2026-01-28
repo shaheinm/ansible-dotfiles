@@ -1,33 +1,35 @@
-- name: Link init.vim
-  template:
-    src: "{{ dotfiles_home }}/roles/nvim/templates/initvim.j2"
-    dest: "{{ ansible_env.HOME }}/.config/nvim/init.vim"
-    force: yes
-
-- name: Link plugin folder
+---
+- name: Ensure nvim config directory exists
   file:
-    src: "{{ dotfiles_home }}/roles/nvim/files/plugin.link"
-    dest: "{{ ansible_env.HOME }}/.config/nvim/plugin"
+    path: "{{ config_home }}/nvim"
+    state: directory
+    mode: '0755'
+
+- name: Remove existing nvim config (if not symlink)
+  file:
+    path: "{{ config_home }}/nvim/{{ item }}"
+    state: absent
+  loop:
+    - init.lua
+    - lua
+  when: ansible_os_family == "Darwin" or ansible_os_family == "Debian" or ansible_os_family == "RedHat"
+
+- name: Link neovim init.lua
+  file:
+    src: "{{ dotfiles_home }}/roles/nvim/files/init.lua"
+    dest: "{{ config_home }}/nvim/init.lua"
     state: link
     force: yes
 
-- name: Link indent folder
+- name: Link neovim lua directory
   file:
-    src: "{{ dotfiles_home }}/roles/nvim/files/indent.link"
-    dest: "{{ ansible_env.HOME }}/.config/nvim/indent"
+    src: "{{ dotfiles_home }}/roles/nvim/files/lua"
+    dest: "{{ config_home }}/nvim/lua"
     state: link
     force: yes
 
-- name: Link ftplugin folder
+- name: Ensure nvim data directory exists
   file:
-    src: "{{ dotfiles_home }}/roles/nvim/files/ftplugin.link"
-    dest: "{{ ansible_env.HOME }}/.config/nvim/ftplugin"
-    state: link
-    force: yes
-
-- name: Link syntax folder
-  file:
-    src: "{{ dotfiles_home }}/roles/nvim/files/syntax.link"
-    dest: "{{ ansible_env.HOME }}/.config/nvim/syntax"
-    state: link
-    force: yes
+    path: "{{ ansible_env.HOME }}/.local/share/nvim"
+    state: directory
+    mode: '0755'

@@ -6,6 +6,9 @@
 {% endif %}
 	name = {{ full_name }}
 	email = {{ git_email }}
+{% if git_signing_key is defined %}
+	signingkey = {{ git_signing_key }}
+{% endif %}
 
 [alias]
   # Add

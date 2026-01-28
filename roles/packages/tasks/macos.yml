@@ -1,38 +1,137 @@
+---
+# =============================================================================
+# macOS Package Installation - Core packages for any machine
+# =============================================================================
+
 - name: Update Homebrew
   homebrew:
     update_homebrew: yes
 
-- name: Upgrade existing packages
-  homebrew:
-    upgrade_all: yes
-
-- name: Install packages
+- name: Install core tools
   homebrew:
     name:
-      - golang
+      # Essential CLI tools
       - git
-      - nginx
       - neovim
       - fzf
       - ripgrep
-      - maven
-      - awscli
-      - openssl
-      - bash
-      - ack
-      - python3
-      - python2
+      - fd
       - jq
+      - yq
       - htop
       - wget
       - curl
-      - ctags-exuberant
-    state: latest
+      - tree
+      - coreutils
+    state: present
 
-- name: Cask install essential packages
+- name: Install terminal enhancements
+  homebrew:
+    name:
+      - starship
+      - zsh-syntax-highlighting
+      - zsh-autosuggestions
+      - ondir
+    state: present
+
+- name: Install git tools
+  homebrew:
+    name:
+      - lazygit
+      - diff-so-fancy
+    state: present
+
+- name: Install version manager
+  homebrew:
+    name:
+      - asdf
+    state: present
+
+- name: Install formatters (for neovim conform.nvim)
+  homebrew:
+    name:
+      - black
+      - isort
+      - stylua
+      - prettier
+      - shfmt
+      - clang-format
+    state: present
+
+- name: Install linters (for neovim nvim-lint)
+  homebrew:
+    name:
+      - shellcheck
+      - cppcheck
+    state: present
+
+- name: Setup fzf keybindings
+  shell: "$(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash --no-fish"
+  args:
+    creates: "{{ ansible_env.HOME }}/.fzf.zsh"
+
+- name: Install Nerd Font
   homebrew_cask:
     name:
-      - firefox
-      - google-chrome
-      - iterm2
-      - slack
+      - font-hack-nerd-font
+    state: present
+  ignore_errors: yes
+
+# =============================================================================
+# asdf Version Manager Setup
+# =============================================================================
+
+- name: Add asdf plugins
+  shell: |
+    source $(brew --prefix asdf)/libexec/asdf.sh
+    asdf plugin add python || true
+    asdf plugin add golang || true
+    asdf plugin add nodejs || true
+    asdf plugin add rust || true
+  args:
+    executable: /bin/zsh
+  ignore_errors: yes
+
+- name: Install Python {{ python_version }} via asdf
+  shell: |
+    source $(brew --prefix asdf)/libexec/asdf.sh
+    asdf install python {{ python_version }}
+    asdf set -u python {{ python_version }}
+  args:
+    executable: /bin/zsh
+  when: python_version != 'skip'
+  ignore_errors: yes
+
+- name: Install Go {{ golang_version }} via asdf
+  shell: |
+    source $(brew --prefix asdf)/libexec/asdf.sh
+    asdf install golang {{ golang_version }}
+    asdf set -u golang {{ golang_version }}
+  args:
+    executable: /bin/zsh
+  when: golang_version != 'skip'
+  ignore_errors: yes
+
+- name: Install Node.js {{ nodejs_version }} via asdf
+  shell: |
+    source $(brew --prefix asdf)/libexec/asdf.sh
+    asdf install nodejs {{ nodejs_version }}
+    asdf set -u nodejs {{ nodejs_version }}
+  args:
+    executable: /bin/zsh
+  when: nodejs_version != 'skip'
+  ignore_errors: yes
+
+# =============================================================================
+# Cleanup - Remove redundant packages
+# =============================================================================
+
+- name: Remove redundant packages (replaced by asdf or unused)
+  homebrew:
+    name:
+      - pyenv           # Replaced by asdf
+      - gimme           # Replaced by asdf
+      - macvim          # Using neovim instead
+      - the_silver_searcher  # ripgrep is better
+    state: absent
+  ignore_errors: yes

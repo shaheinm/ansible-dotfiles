@@ -1,6 +1,14 @@
+---
+# Core packages (always installed)
 - import_tasks: linux.yml
-  when: ( ansible_facts['os_family'] == "RedHat" or ansible_facts['os_family'] == "Debian" )
+  when: ansible_facts['os_family'] == "RedHat" or ansible_facts['os_family'] == "Debian"
 
 - import_tasks: macos.yml
   when: ansible_facts['os_family'] == "Darwin"
 
+# Work-specific packages (optional, run with --tags "packages-work")
+- import_tasks: macos-work.yml
+  when: ansible_facts['os_family'] == "Darwin"
+  tags:
+    - packages-work
+    - never  # Only runs when explicitly tagged

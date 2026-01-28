@@ -1,18 +1,24 @@
+---
+# Dotfiles location
 dotfiles_home: "{{ ansible_env.HOME }}/dev/ansible-dotfiles"
+config_home: "{{ ansible_env.HOME }}/.config"
 
+# User info
 full_name: Shahein Moussavi
 username: shaheinm
+git_email: shahein.moussavi@wbd.com
+git_signing_key: ~/.ssh/id_ed25519.pub
 
-git_email: shaheinm@gmail.com
-
+# Feature flags
 vim_install_plugins: no
+use_asdf: yes
 
-python3_mac: "/usr/local/bin/python3"
+# Paths (OS-specific)
+python3_mac: "/opt/homebrew/bin/python3"
 python2_mac: "/usr/local/bin/python2"
 
 python3_linux: "/usr/bin/python3"
 python2_linux: "/usr/bin/python2"
 
-editor_mac: "/usr/local/bin/nvim"
+editor_mac: "/opt/homebrew/bin/nvim"
 editor_linux: "/usr/bin/nvim"
-
