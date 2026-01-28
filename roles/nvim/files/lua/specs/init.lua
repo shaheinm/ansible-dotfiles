@@ -13,23 +13,19 @@ local Plugins = {
   ----------------------------
   -- LSP & Diagnostic Stuff --
   ----------------------------
-  {
-    "neovim/nvim-lspconfig",
-    event = { "BufRead", "BufNewFile" },
-    dependencies = {
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
-    },
-    config = function()
-      require("mason-lspconfig").setup()
-      require("lsp.server_setup")
-      require("lspconfig.ui.windows").default_options.border = vim.g.FloatBorders
-    end,
-  },
+  -- Using native vim.lsp.config (Neovim 0.11+) instead of lspconfig
   {
     "williamboman/mason.nvim",
+    lazy = false,
     config = function()
-      require('mason').setup()
+      require('mason').setup({
+        ui = {
+          border = vim.g.FloatBorders or "rounded",
+        },
+      })
+      -- Load native LSP configuration
+      require("lsp")
+      require("lsp.server_setup")
     end,
   },
   {
