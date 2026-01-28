@@ -1,3 +1,4 @@
+---
 - name: Link global gitignore
   file:
     src: "{{ dotfiles_home }}/roles/git/files/gitignore_global.link"
@@ -21,17 +22,30 @@
     src: "gitconfig.j2"
     dest: "{{ ansible_env.HOME }}/.gitconfig"
 
-- name: Link diff-so-fancy
+- name: Ensure bin directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/bin"
+    state: directory
+    mode: '0755'
+
+- name: Link diff-so-fancy (if exists)
   file:
     src: "{{ dotfiles_home }}/roles/git/files/diff-so-fancy.link"
     dest: "{{ ansible_env.HOME }}/bin/diff-so-fancy"
     state: link
     force: yes
+  ignore_errors: yes
 
-- name: Link githelpers
+- name: Ensure git helpers directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/git"
+    state: directory
+    mode: '0755'
+
+- name: Link githelpers (if exists)
   file:
     src: "{{ dotfiles_home }}/roles/git/files/githelpers.link"
     dest: "{{ ansible_env.HOME }}/git/githelpers"
     state: link
     force: yes
-
+  ignore_errors: yes
