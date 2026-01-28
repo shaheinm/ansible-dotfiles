@@ -1,33 +1,30 @@
-- name: Installing pre-reqs for Minikube
+# =============================================================================
+# Kubernetes Tools - Fedora
+# =============================================================================
+# Installs container runtime prerequisites for minikube on Fedora.
+# Uses Podman as an alternative to Docker.
+# =============================================================================
+
+- name: Install Podman for minikube driver
   dnf:
     name:
-      - '@virtualization'
-    state: latest
-  become: yes
-
-- name: Ensure libvirt group exists
-  group:
-    name: libvirt
+      - podman
+      - podman-docker
     state: present
-
-- name: Add user to libvirt group
-  user:
-    name: "{{ username }}"
-    group: libvirt
-    append: yes
   become: yes
 
-- name: Install Docker Machine
-  get_url:
-    url: https://github.com/docker/machine/releases/download/v0.12.0/docker-machine-Linux-x86_64
-    dest: /usr/local/bin/docker-machine
-    mode: +x
-  become: yes
-
-- name: Install Docker Machine KVM Driver
-  get_url:
-    url: https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.10.0/docker-machine-driver-kvm-centos7
-    dest: /usr/local/bin/docker-machine-driver-kvm
-    mode: +x
-  become: yes
-
+# Optionally set up libvirt for KVM driver (faster than Podman)
+# Uncomment if you prefer KVM:
+#
+# - name: Install virtualization packages
+#   dnf:
+#     name: '@virtualization'
+#     state: present
+#   become: yes
+#
+# - name: Add user to libvirt group
+#   user:
+#     name: "{{ username }}"
+#     groups: libvirt
+#     append: yes
+#   become: yes

@@ -138,20 +138,24 @@
   default = tracking
 
 [merge]
-  tool = Kaleidoscope
   algorithm = patience
   strategy = recursive
+{% if ansible_os_family == 'Darwin' %}
+  tool = Kaleidoscope
 
 [mergetool "Kaleidoscope"]
   cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
   trustExitCode = true
+{% endif %}
 
 [diff]
-  tool = Kaleidoscope
   compactionHeuristic = true
+{% if ansible_os_family == 'Darwin' %}
+  tool = Kaleidoscope
 
 [difftool "Kaleidoscope"]
   cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+{% endif %}
 
 [core]
   excludesfile = ~/.gitignore_global

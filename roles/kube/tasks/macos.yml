@@ -1,11 +1,26 @@
-- name: Install Virtualbox, Docker Machine, and Minikube
-  homebrew_cask:
+# =============================================================================
+# Kubernetes Tools - macOS
+# =============================================================================
+# Installs minikube with Podman as the container driver.
+# Podman is rootless and daemonless - lighter than Docker Desktop.
+# =============================================================================
+
+- name: Install Podman and minikube
+  homebrew:
     name:
-      - virtualbox
-      - virtualbox-extension-pack
-      - docker-toolbox
-      - minikube
-    state: latest
+      - podman
+    state: present
 
+- name: Install minikube
+  homebrew_cask:
+    name: minikube
+    state: present
 
+# Initialize Podman machine (required on macOS)
+# Run manually after install:
+#   podman machine init
+#   podman machine start
+#   minikube start --driver=podman
 
+# kubectl, kubectx, and helm are installed via packages/macos-work.yml
+# Run with: ansible-playbook -i hosts playbook.yml --tags "packages-work"

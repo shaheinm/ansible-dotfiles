@@ -1,5 +1,0 @@
-- name: Install openshift-cli on MacOS
-  homebrew:
-    name: openshift-cli
-    state: latest
-

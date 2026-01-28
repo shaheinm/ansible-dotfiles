@@ -70,33 +70,14 @@ ansible-dotfiles/
 ├── group_vars/
 │   └── local                 # Variables (name, email, paths)
 ├── roles/
-│   ├── git/                  # Git configuration
-│   │   ├── tasks/main.yml
-│   │   ├── templates/gitconfig.j2
-│   │   └── files/
-│   ├── nvim/                 # Neovim configuration
-│   │   ├── tasks/main.yml
-│   │   └── files/
-│   │       ├── init.lua
-│   │       └── lua/
-│   │           ├── user/     # Core settings
-│   │           ├── lsp/      # Native LSP config (vim.lsp.config)
-│   │           ├── plugins/  # Plugin configs
-│   │           └── specs/    # Plugin specifications
+│   ├── packages/             # Package installation (Homebrew/apt/dnf)
+│   ├── git/                  # Git configuration + aliases
 │   ├── zsh/                  # Zsh configuration
-│   │   ├── tasks/main.yml
-│   │   └── files/zshrc.link
+│   ├── bash/                 # Bash configuration (tagged: never)
 │   ├── starship/             # Starship prompt
-│   │   ├── tasks/main.yml
-│   │   └── files/starship.toml
-│   ├── packages/             # Package installation
-│   │   └── tasks/
-│   │       ├── main.yml
-│   │       ├── macos.yml       # Core packages
-│   │       ├── macos-work.yml  # Work-specific packages
-│   │       └── linux.yml
-│   ├── node/                 # Node.js/NVM setup (legacy)
-│   └── kube/                 # Kubernetes tools
+│   ├── nvim/                 # Neovim configuration (native LSP)
+│   ├── kube/                 # Kubernetes + Podman/minikube
+│   └── node/                 # NVM setup (legacy, tagged: never)
 └── README.md
 ```
 
@@ -168,6 +149,10 @@ ansible-dotfiles/
 - Kubernetes: kubectl, kubectx, helm
 - Cloud: awscli, fastly, cfn-lint, ansible
 - Backend: postgresql@14, rabbitmq
+
+**Containers (kube role):**
+- Podman (preferred over Docker - rootless, daemonless)
+- minikube (uses Podman driver)
 
 **Languages via asdf:**
 - Python (prompted, default: latest)
@@ -247,6 +232,16 @@ After running the playbook:
    node --version
    ```
 
+4. **Set up Podman** (if using kube role):
+   ```bash
+   # macOS only - initialize Podman machine
+   podman machine init
+   podman machine start
+   
+   # Start minikube with Podman
+   minikube start --driver=podman
+   ```
+
 ## Troubleshooting
 
 ### Neovim errors on startup
@@ -297,7 +292,8 @@ To update the configuration:
 This repo replaces the previous `~/.dotfiles` approach with:
 - Ansible for reproducibility across machines
 - Native Neovim 0.11+ LSP (no lspconfig deprecation warnings)
-- Cleaner, faster neovim config (58 → 32 plugins)
+- Cleaner, faster neovim config (58 → ~30 plugins)
 - Starship prompt (replaced Powerlevel10k + Oh My Zsh)
 - Single version manager (asdf replaces nvm, pyenv, gimme)
+- Podman preferred over Docker (rootless, daemonless)
 - Interactive language version prompts

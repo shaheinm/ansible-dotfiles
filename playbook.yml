@@ -25,7 +25,8 @@
     - { role: packages, tags: ['packages', 'bootstrap'] }
     - { role: git, tags: ['git', 'bootstrap'] }
     - { role: zsh, tags: ['zsh', 'bootstrap'] }
+    - { role: bash, tags: ['bash', 'never'] }
     - { role: starship, tags: ['starship', 'bootstrap'] }
     - { role: nvim, tags: ['nvim', 'bootstrap'] }
-    - { role: node, tags: ['node'] }
+    - { role: node, tags: ['node', 'never'] }
     - { role: kube, tags: ['kube'] }

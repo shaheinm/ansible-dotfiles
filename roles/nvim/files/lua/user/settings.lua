@@ -17,8 +17,8 @@ end
 -- Line numbers
 o.number = true
 
--- Python path (adjust for your system)
-g.python_host_prog = '/usr/bin/python3'
+-- Python path (detected dynamically)
+g.python3_host_prog = vim.fn.exepath('python3')
 
 -- Search settings
 opt.smartcase = true
@@ -46,9 +46,6 @@ opt.expandtab = true
 
 -- Mouse support
 opt.mouse = 'a'
-
--- Completion
-opt.completeopt = {'menu', 'menuone'}
 
 -- Tags
 opt.tags:prepend(string.format('%s/.git/tags', fn.getcwd()))

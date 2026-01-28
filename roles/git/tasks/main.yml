@@ -28,14 +28,6 @@
     state: directory
     mode: '0755'
 
-- name: Link diff-so-fancy (if exists)
-  file:
-    src: "{{ dotfiles_home }}/roles/git/files/diff-so-fancy.link"
-    dest: "{{ ansible_env.HOME }}/bin/diff-so-fancy"
-    state: link
-    force: yes
-  ignore_errors: yes
-
 - name: Ensure git helpers directory exists
   file:
     path: "{{ ansible_env.HOME }}/git"

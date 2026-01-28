@@ -1,16 +1,34 @@
-- name: stat nvm folder
+# =============================================================================
+# Node.js Role - LEGACY
+# =============================================================================
+# This role installs NVM for Node.js version management.
+# DEPRECATED: Use asdf instead (installed via packages role).
+#
+# To install Node.js with asdf:
+#   asdf plugin add nodejs
+#   asdf install nodejs latest
+#   asdf set -u nodejs latest
+#
+# This role is kept for backwards compatibility only.
+# =============================================================================
+
+- name: Check if nvm folder exists
   stat:
     path: "{{ ansible_env.HOME }}/.nvm"
   register: nvm_stat
 
-- name: Download NVM script
+- name: Download NVM install script
   get_url:
-    url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh
-    dest: "{{ ansible_env.HOME }}/dev/install.sh"
-    mode: +x
+    url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh
+    dest: "{{ ansible_env.TMPDIR | default('/tmp') }}/nvm_install.sh"
+    mode: '0755'
   when: not nvm_stat.stat.exists
 
-- name: Run nvm script
-  command: "bash {{ ansible_env.HOME }}/dev/install.sh"
+- name: Run NVM install script
+  command: "bash {{ ansible_env.TMPDIR | default('/tmp') }}/nvm_install.sh"
   when: not nvm_stat.stat.exists
 
+- name: Clean up NVM install script
+  file:
+    path: "{{ ansible_env.TMPDIR | default('/tmp') }}/nvm_install.sh"
+    state: absent

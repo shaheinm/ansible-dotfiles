@@ -1,3 +1,15 @@
+# =============================================================================
+# Kubernetes Role
+# =============================================================================
+# Sets up minikube for local Kubernetes development.
+#
+# Uses Podman as the preferred container driver (rootless, daemonless).
+# kubectl, kubectx, helm installed via packages/macos-work.yml
+#
+# After install, start minikube with:
+#   minikube start --driver=podman
+# =============================================================================
+
 - import_tasks: linux.yml
   when: ansible_system == "Linux"
 

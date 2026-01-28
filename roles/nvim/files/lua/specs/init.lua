@@ -8,7 +8,6 @@ local Plugins = {
 
   -- Core utilities
   { 'tpope/vim-repeat', keys = '.' },
-  { 'nvim-lua/plenary.nvim', lazy = true },
 
   ----------------------------
   -- LSP & Diagnostic Stuff --
@@ -159,11 +158,6 @@ local Plugins = {
     config = function()
       require("plugins.neotree")
     end,
-  },
-  {
-    "nvim-tree/nvim-web-devicons",
-    lazy = true,
-    opts = { default = true },
   },
 
   ----------------------------

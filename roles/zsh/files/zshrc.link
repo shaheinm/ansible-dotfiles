@@ -54,9 +54,14 @@ alias ls="ls -FAl"
 alias ll="ls -lah"
 alias work="cd ~/dev"
 
-# Docker aliases
-alias dc=docker-compose
-alias docker-cleanup='docker ps -a | grep Exit | cut -d " " -f 1 | xargs docker rm'
+# Podman (preferred over Docker)
+if exists podman; then
+  alias docker=podman
+  alias docker-compose='podman compose'
+fi
+alias dc='podman compose'
+alias container-cleanup='podman container prune -f'
+alias image-cleanup='podman image prune -a -f'
 
 # Git aliases (supplement gitconfig)
 alias gs="git status"
@@ -115,7 +120,6 @@ fi
 
 # -- Go ------------------------------------------------------------------------
 export GOPATH="$HOME/go"
-export GO111MODULE=on
 export PATH="$PATH:$GOPATH/bin"
 
 # -- Path additions ------------------------------------------------------------
@@ -127,10 +131,11 @@ export PATH="$PATH:$DOTFILES/scripts/bin:$HOME/.local/bin:$HOME/bin"
 
 # -- ondir (directory-specific environment) ------------------------------------
 if exists ondir; then
+  autoload -Uz add-zsh-hook
   eval_ondir() {
     eval "`ondir \"$OLDPWD\" \"$PWD\"`"
   }
-  chpwd_functions=( eval_ondir $chpwd_functions )
+  add-zsh-hook chpwd eval_ondir
 fi
 
 # -- Local config (machine-specific overrides) ---------------------------------

@@ -1,8 +1,16 @@
-- name: Use VirtualBox on Ubuntu
+# =============================================================================
+# Kubernetes Tools - Ubuntu
+# =============================================================================
+# Installs Podman for minikube driver on Ubuntu.
+# Podman is rootless and daemonless - preferred over Docker.
+# =============================================================================
+
+- name: Install Podman
   apt:
     name:
-      - virtualbox
-      - virtualbox-ext-pack
-    state: latest
+      - podman
+    state: present
   become: yes
 
+# minikube with Podman:
+#   minikube start --driver=podman
