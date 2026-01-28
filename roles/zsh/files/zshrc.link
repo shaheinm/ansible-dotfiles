@@ -1,0 +1,137 @@
+# =============================================================================
+# ZSH Configuration - Managed by Ansible
+# =============================================================================
+
+# -- Environment ---------------------------------------------------------------
+export CLICOLOR=1
+export TERM=xterm-256color
+export XDG_CONFIG_HOME="$HOME/.config"
+export DOTFILES="$HOME/dev/ansible-dotfiles"
+
+# -- Zsh Options ---------------------------------------------------------------
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt SHARE_HISTORY
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+unsetopt correct_all
+unsetopt correct
+
+# -- Completion ----------------------------------------------------------------
+autoload -Uz compinit
+compinit
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*:*:vim:*:*files' ignored-patterns '*.class'
+
+# -- Plugins (no Oh My Zsh) ----------------------------------------------------
+# zsh-syntax-highlighting
+if [[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+elif [[ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+  source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+elif [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+  source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+# zsh-autosuggestions
+if [[ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+elif [[ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+  source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+elif [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+  source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+# -- Aliases -------------------------------------------------------------------
+alias vim=nvim
+alias vi=nvim
+alias ls="ls -FAl"
+alias ll="ls -lah"
+alias work="cd ~/dev"
+
+# Docker aliases
+alias dc=docker-compose
+alias docker-cleanup='docker ps -a | grep Exit | cut -d " " -f 1 | xargs docker rm'
+
+# Git aliases (supplement gitconfig)
+alias gs="git status"
+alias gd="git diff"
+alias gl="git log --oneline -20"
+
+# -- Helper Functions ----------------------------------------------------------
+# Extract archive based on file type
+extract() {
+    if [[ -f $1 ]]; then
+        case $1 in
+            *.tar.bz2) tar xjf $1 ;;
+            *.tar.gz)  tar xzf $1 ;;
+            *.bz2)     bunzip2 $1 ;;
+            *.rar)     unrar x $1 ;;
+            *.gz)      gunzip $1 ;;
+            *.tar)     tar xf $1 ;;
+            *.tbz2)    tar xjf $1 ;;
+            *.tgz)     tar xzf $1 ;;
+            *.zip)     unzip $1 ;;
+            *.Z)       uncompress $1 ;;
+            *)         echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# Check if command exists
+exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# -- fzf -----------------------------------------------------------------------
+if [[ -f ~/.fzf.zsh ]]; then
+  source ~/.fzf.zsh
+  export FZF_DEFAULT_OPTS='--color 16,info:6,hl:13,hl+:13'
+  export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git'"
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
+
+# -- asdf (single version manager) ---------------------------------------------
+if [[ -d "$HOME/.asdf" ]]; then
+  source "$HOME/.asdf/asdf.sh"
+  fpath=(${ASDF_DIR}/completions $fpath)
+fi
+
+# -- Kubectl -------------------------------------------------------------------
+if exists kubectl; then
+  source <(kubectl completion zsh)
+fi
+
+# -- Go ------------------------------------------------------------------------
+export GOPATH="$HOME/go"
+export GO111MODULE=on
+export PATH="$PATH:$GOPATH/bin"
+
+# -- Path additions ------------------------------------------------------------
+export PATH="$PATH:$DOTFILES/scripts/bin:$HOME/.local/bin:$HOME/bin"
+
+# -- User Aliases --------------------------------------------------------------
+# Source user-specific aliases
+[[ -f ~/.aliases ]] && source ~/.aliases
+
+# -- ondir (directory-specific environment) ------------------------------------
+if exists ondir; then
+  eval_ondir() {
+    eval "`ondir \"$OLDPWD\" \"$PWD\"`"
+  }
+  chpwd_functions=( eval_ondir $chpwd_functions )
+fi
+
+# -- Local config (machine-specific overrides) ---------------------------------
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+[[ -f ~/.kuberc ]] && source ~/.kuberc
+
+# -- Starship prompt (must be last) --------------------------------------------
+eval "$(starship init zsh)"
