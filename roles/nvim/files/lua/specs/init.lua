@@ -113,13 +113,16 @@ local Plugins = {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     lazy = false,
+    config = function()
+      require("plugins.treesitter")
+    end,
   },
   {
-    'nvim-treesitter/nvim-treesitter-textobjects',
+    'echasnovski/mini.ai',
     lazy = false,
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     config = function()
-      require("plugins.treesitter")
+      require("plugins.textobjects")
     end,
   },
 
