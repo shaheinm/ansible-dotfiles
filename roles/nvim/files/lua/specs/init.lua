@@ -113,15 +113,14 @@ local Plugins = {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     lazy = false,
-    priority = 900,  -- Load before textobjects
-    config = function()
-      require("plugins.treesitter")
-    end,
   },
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
     lazy = false,
-    priority = 800,  -- Load after treesitter
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require("plugins.treesitter")
+    end,
   },
 
   ----------------------------
