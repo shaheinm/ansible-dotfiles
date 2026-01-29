@@ -32,6 +32,9 @@
       - zsh-syntax-highlighting
       - zsh-autosuggestions
       - ondir
+      - bat
+      - eza
+      - zoxide
     state: present
 
 - name: Install git tools
@@ -39,6 +42,7 @@
     name:
       - lazygit
       - diff-so-fancy
+      - git-delta
     state: present
 
 - name: Install version manager
@@ -68,7 +72,7 @@
 - name: Setup fzf keybindings
   shell: "$(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc --no-bash --no-fish"
   args:
-    creates: "{{ ansible_env.HOME }}/.fzf.zsh"
+    creates: "{{ ansible_facts['env']['HOME'] }}/.fzf.zsh"
 
 - name: Install Nerd Font
   homebrew_cask:

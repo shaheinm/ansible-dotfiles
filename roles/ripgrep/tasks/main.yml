@@ -1,0 +1,15 @@
+---
+# =============================================================================
+# Ripgrep Role - Fast grep alternative
+# =============================================================================
+
+- name: Link ripgrep config
+  file:
+    src: "{{ dotfiles_home }}/roles/ripgrep/files/ripgreprc"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.ripgreprc"
+    state: link
+    force: yes
+
+- name: Set RIPGREP_CONFIG_PATH in zshrc.local (optional)
+  debug:
+    msg: "ripgrep will use ~/.ripgreprc automatically"

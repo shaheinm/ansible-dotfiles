@@ -1,14 +1,17 @@
 ---
+# =============================================================================
+# Linux Package Installation
+# =============================================================================
+# Supports: Debian/Ubuntu, Fedora/RHEL, Arch Linux
+# Uses native package managers (apt, dnf, pacman) - no Homebrew
+
 - name: Use python3 interpreter for Ansible on Fedora
   include_vars: "Fedora.yml"
-  when:
-    - ansible_distribution == "Fedora"
+  when: ansible_facts['distribution'] == "Fedora"
 
-- name: Update package manager
-  package:
-    name: '*'
-    state: latest
-  become: yes
+# =============================================================================
+# Debian/Ubuntu
+# =============================================================================
 
 - name: Install core packages (Debian/Ubuntu)
   apt:
@@ -23,24 +26,79 @@
       - htop
       - wget
       - curl
+      - tree
+      - bat
+      - shellcheck
 
       # Zsh plugins
+      - zsh
       - zsh-syntax-highlighting
       - zsh-autosuggestions
 
-      # Languages
-      - golang
+      # Languages (base - asdf will manage versions)
       - python3
       - python3-pip
-      - nodejs
-      - npm
+      - python3-venv
 
-      # Cloud/Container
-      - awscli
+      # Container
       - podman
     state: present
+    update_cache: yes
   become: yes
-  when: ansible_os_family == "Debian"
+  when: ansible_facts['os_family'] == "Debian"
+
+# Tools not in apt - install via GitHub releases or other methods
+- name: Install eza (Debian/Ubuntu)
+  shell: |
+    curl -Lo /tmp/eza.tar.gz "https://github.com/eza-community/eza/releases/latest/download/eza_x86_64-unknown-linux-gnu.tar.gz"
+    tar xf /tmp/eza.tar.gz -C /tmp
+    install /tmp/eza /usr/local/bin/eza
+    rm -f /tmp/eza /tmp/eza.tar.gz
+  args:
+    creates: /usr/local/bin/eza
+  become: yes
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Install zoxide (Debian/Ubuntu)
+  shell: |
+    curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+  args:
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/zoxide"
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Install yq (Debian/Ubuntu)
+  shell: |
+    curl -Lo /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64"
+    chmod +x /usr/local/bin/yq
+  args:
+    creates: /usr/local/bin/yq
+  become: yes
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Install delta (Debian/Ubuntu)
+  shell: |
+    curl -Lo /tmp/delta.deb "https://github.com/dandavison/delta/releases/latest/download/git-delta_0.18.2_amd64.deb"
+    dpkg -i /tmp/delta.deb || apt-get install -f -y
+    rm -f /tmp/delta.deb
+  args:
+    creates: /usr/bin/delta
+  become: yes
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Install ondir from source (Debian/Ubuntu)
+  shell: |
+    apt-get install -y build-essential
+    git clone https://github.com/alecthomas/ondir.git /tmp/ondir
+    cd /tmp/ondir && make && make install
+    rm -rf /tmp/ondir
+  args:
+    creates: /usr/local/bin/ondir
+  become: yes
+  when: ansible_facts['os_family'] == "Debian"
+
+# =============================================================================
+# Fedora/RHEL
+# =============================================================================
 
 - name: Install core packages (Fedora/RHEL)
   dnf:
@@ -55,20 +113,69 @@
       - htop
       - wget
       - curl
+      - tree
+      - bat
+      - zoxide
+      - ShellCheck
 
-      # Languages
-      - golang
+      # Zsh plugins
+      - zsh
+      - zsh-syntax-highlighting
+      - zsh-autosuggestions
+
+      # Languages (base - asdf will manage versions)
       - python3
       - python3-pip
-      - nodejs
-      - npm
 
-      # Cloud/Container
-      - awscli
+      # Container
       - podman
     state: present
   become: yes
-  when: ansible_os_family == "RedHat"
+  when: ansible_facts['os_family'] == "RedHat"
+
+# Tools not in standard Fedora repos - install via GitHub releases
+- name: Install eza (Fedora)
+  shell: |
+    curl -Lo /tmp/eza.tar.gz "https://github.com/eza-community/eza/releases/latest/download/eza_x86_64-unknown-linux-gnu.tar.gz"
+    tar xf /tmp/eza.tar.gz -C /tmp
+    install /tmp/eza /usr/local/bin/eza
+    rm -f /tmp/eza /tmp/eza.tar.gz
+  args:
+    creates: /usr/local/bin/eza
+  become: yes
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Install yq (Fedora)
+  shell: |
+    curl -Lo /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64"
+    chmod +x /usr/local/bin/yq
+  args:
+    creates: /usr/local/bin/yq
+  become: yes
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Install delta (Fedora)
+  dnf:
+    name: git-delta
+    state: present
+  become: yes
+  when: ansible_facts['os_family'] == "RedHat"
+  ignore_errors: yes
+
+- name: Install ondir from source (Fedora)
+  shell: |
+    dnf install -y make gcc
+    git clone https://github.com/alecthomas/ondir.git /tmp/ondir
+    cd /tmp/ondir && make && make install
+    rm -rf /tmp/ondir
+  args:
+    creates: /usr/local/bin/ondir
+  become: yes
+  when: ansible_facts['os_family'] == "RedHat"
+
+# =============================================================================
+# Cross-distro installs (curl scripts)
+# =============================================================================
 
 - name: Install starship prompt
   shell: |
@@ -87,3 +194,112 @@
   args:
     creates: /usr/local/bin/lazygit
   become: yes
+
+# =============================================================================
+# asdf Version Manager
+# =============================================================================
+
+- name: Clone asdf
+  git:
+    repo: https://github.com/asdf-vm/asdf.git
+    dest: "{{ ansible_facts['env']['HOME'] }}/.asdf"
+    version: v0.14.0
+  register: asdf_clone
+
+- name: Add asdf plugins
+  shell: |
+    source ~/.asdf/asdf.sh
+    asdf plugin add python || true
+    asdf plugin add golang || true
+    asdf plugin add nodejs || true
+    asdf plugin add rust || true
+  args:
+    executable: /bin/bash
+  when: asdf_clone.changed or not ansible_facts['env']['HOME'] | regex_search('.asdf')
+  ignore_errors: yes
+
+- name: Install Python {{ python_version }} via asdf
+  shell: |
+    source ~/.asdf/asdf.sh
+    asdf install python {{ python_version }}
+    asdf set -u python {{ python_version }}
+  args:
+    executable: /bin/bash
+  when: python_version != 'skip'
+  ignore_errors: yes
+
+- name: Install Go {{ golang_version }} via asdf
+  shell: |
+    source ~/.asdf/asdf.sh
+    asdf install golang {{ golang_version }}
+    asdf set -u golang {{ golang_version }}
+  args:
+    executable: /bin/bash
+  when: golang_version != 'skip'
+  ignore_errors: yes
+
+- name: Install Node.js {{ nodejs_version }} via asdf
+  shell: |
+    source ~/.asdf/asdf.sh
+    asdf install nodejs {{ nodejs_version }}
+    asdf set -u nodejs {{ nodejs_version }}
+  args:
+    executable: /bin/bash
+  when: nodejs_version != 'skip'
+  ignore_errors: yes
+
+# =============================================================================
+# Nerd Fonts
+# =============================================================================
+
+- name: Create fonts directory
+  file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.local/share/fonts"
+    state: directory
+    mode: '0755'
+
+- name: Install Hack Nerd Font
+  shell: |
+    curl -Lo /tmp/Hack.zip "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip"
+    unzip -o /tmp/Hack.zip -d {{ ansible_facts['env']['HOME'] }}/.local/share/fonts/
+    fc-cache -fv
+    rm -f /tmp/Hack.zip
+  args:
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/share/fonts/HackNerdFont-Regular.ttf"
+
+# =============================================================================
+# Formatters and Linters
+# =============================================================================
+
+- name: Install Python formatters via pip
+  shell: pip3 install --user black isort
+  args:
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/black"
+  ignore_errors: yes
+
+- name: Install stylua (Debian/Ubuntu)
+  shell: |
+    curl -Lo /tmp/stylua.zip "https://github.com/JohnnyMorganz/StyLua/releases/latest/download/stylua-linux-x86_64.zip"
+    unzip -o /tmp/stylua.zip -d /tmp/
+    install /tmp/stylua /usr/local/bin/stylua
+    rm -f /tmp/stylua /tmp/stylua.zip
+  args:
+    creates: /usr/local/bin/stylua
+  become: yes
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Install shfmt (Debian/Ubuntu)
+  shell: |
+    curl -Lo /usr/local/bin/shfmt "https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.8.0_linux_amd64"
+    chmod +x /usr/local/bin/shfmt
+  args:
+    creates: /usr/local/bin/shfmt
+  become: yes
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Install prettier via npm
+  npm:
+    name: prettier
+    global: yes
+  become: yes
+  ignore_errors: yes

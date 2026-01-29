@@ -1,0 +1,39 @@
+# =============================================================================
+# Ripgrep Configuration
+# =============================================================================
+# Environment variable: RIPGREP_CONFIG_PATH=~/.ripgreprc
+
+# Smart case (case-insensitive unless uppercase used)
+--smart-case
+
+# Search hidden files
+--hidden
+
+# Follow symlinks
+--follow
+
+# Ignore common directories
+--glob=!.git/
+--glob=!node_modules/
+--glob=!vendor/
+--glob=!.venv/
+--glob=!__pycache__/
+--glob=!.pytest_cache/
+--glob=!.mypy_cache/
+--glob=!dist/
+--glob=!build/
+--glob=!target/
+--glob=!.next/
+--glob=!coverage/
+
+# Ignore common file types
+--glob=!*.min.js
+--glob=!*.min.css
+--glob=!*.map
+--glob=!package-lock.json
+--glob=!yarn.lock
+--glob=!pnpm-lock.yaml
+--glob=!Cargo.lock
+
+# Preserve from existing config
+--glob=!public/

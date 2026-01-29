@@ -1,0 +1,107 @@
+# =============================================================================
+# Aerospace Configuration - i3-like tiling window manager for macOS
+# =============================================================================
+# Docs: https://nikitabobko.github.io/AeroSpace/guide
+
+# Start Aerospace at login
+start-at-login = true
+
+# Mouse follows focus
+on-focused-monitor-changed = ["move-mouse monitor-lazy-center"]
+
+# Normalizations
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# =============================================================================
+# Gaps
+# =============================================================================
+
+[gaps]
+inner.horizontal = 8
+inner.vertical = 8
+outer.left = 8
+outer.right = 8
+outer.top = 8
+outer.bottom = 8
+
+# =============================================================================
+# Key bindings - Main mode
+# =============================================================================
+# Using alt (option) as the mod key, similar to i3/sway defaults
+
+[mode.main.binding]
+
+# Focus windows (vim keys)
+alt-h = "focus left"
+alt-j = "focus down"
+alt-k = "focus up"
+alt-l = "focus right"
+
+# Move windows
+alt-shift-h = "move left"
+alt-shift-j = "move down"
+alt-shift-k = "move up"
+alt-shift-l = "move right"
+
+# Resize windows
+alt-minus = "resize smart -50"
+alt-equal = "resize smart +50"
+
+# Layout commands
+alt-f = "fullscreen"
+alt-shift-space = "layout floating tiling"
+alt-slash = "layout tiles horizontal vertical"
+alt-comma = "layout accordion horizontal vertical"
+
+# Split orientation
+alt-backslash = "split horizontal"
+alt-shift-backslash = "split vertical"
+
+# Workspaces (switch)
+alt-1 = "workspace 1"
+alt-2 = "workspace 2"
+alt-3 = "workspace 3"
+alt-4 = "workspace 4"
+alt-5 = "workspace 5"
+alt-6 = "workspace 6"
+alt-7 = "workspace 7"
+alt-8 = "workspace 8"
+alt-9 = "workspace 9"
+
+# Move window to workspace
+alt-shift-1 = "move-node-to-workspace 1"
+alt-shift-2 = "move-node-to-workspace 2"
+alt-shift-3 = "move-node-to-workspace 3"
+alt-shift-4 = "move-node-to-workspace 4"
+alt-shift-5 = "move-node-to-workspace 5"
+alt-shift-6 = "move-node-to-workspace 6"
+alt-shift-7 = "move-node-to-workspace 7"
+alt-shift-8 = "move-node-to-workspace 8"
+alt-shift-9 = "move-node-to-workspace 9"
+
+# Focus monitors
+alt-tab = "workspace-back-and-forth"
+alt-shift-tab = "move-workspace-to-monitor --wrap-around next"
+
+# Reload config
+alt-shift-c = "reload-config"
+
+# Enter service mode for less common operations
+alt-shift-semicolon = "mode service"
+
+# =============================================================================
+# Service mode - for less common operations
+# =============================================================================
+
+[mode.service.binding]
+esc = ["reload-config", "mode main"]
+r = ["flatten-workspace-tree", "mode main"]
+f = ["layout floating tiling", "mode main"]
+backspace = ["close-all-windows-but-current", "mode main"]
+
+# Join with adjacent windows
+alt-shift-h = ["join-with left", "mode main"]
+alt-shift-j = ["join-with down", "mode main"]
+alt-shift-k = ["join-with up", "mode main"]
+alt-shift-l = ["join-with right", "mode main"]

@@ -1,0 +1,52 @@
+# =============================================================================
+# SSH Configuration - Managed by Ansible
+# =============================================================================
+
+# Global defaults for all hosts
+Host *
+    AddKeysToAgent yes
+    IdentityFile ~/.ssh/id_ed25519
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    IdentitiesOnly yes
+
+# GitHub
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+
+# GitLab
+Host gitlab.com
+    HostName gitlab.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+
+# =============================================================================
+# Work hosts (customize for your environment)
+# =============================================================================
+
+# Example: Jump/bastion host pattern
+# Host bastion
+#     HostName bastion.example.com
+#     User {{ username }}
+#     IdentityFile ~/.ssh/id_ed25519
+#
+# Host internal-*
+#     ProxyJump bastion
+#     User {{ username }}
+#
+# Host internal-web
+#     HostName 10.0.1.10
+#
+# Host internal-db
+#     HostName 10.0.1.20
+
+# =============================================================================
+# Short aliases (customize)
+# =============================================================================
+
+# Host dev
+#     HostName dev.mycompany.com
+#     User {{ username }}
+#     ForwardAgent yes

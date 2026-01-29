@@ -2,42 +2,42 @@
 - name: Link global gitignore
   file:
     src: "{{ dotfiles_home }}/roles/git/files/gitignore_global.link"
-    dest: "{{ ansible_env.HOME }}/.gitignore_global"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.gitignore_global"
     state: link
     force: yes
 
 - name: Check if gitconfig exists
   stat:
-    path: "{{ ansible_env.HOME }}/.gitconfig"
+    path: "{{ ansible_facts['env']['HOME'] }}/.gitconfig"
   register: gitconfig_stat
 
 - name: Back up gitconfig
   command: mv ~/.gitconfig ~/.gitconfig.bak
   args:
-    creates: "{{ ansible_env.HOME }}/.gitconfig.bak"
+    creates: "{{ ansible_facts['env']['HOME'] }}/.gitconfig.bak"
   when: gitconfig_stat.stat.exists
 
 - name: Make sure gitconfig is up to date
   template:
     src: "gitconfig.j2"
-    dest: "{{ ansible_env.HOME }}/.gitconfig"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.gitconfig"
 
 - name: Ensure bin directory exists
   file:
-    path: "{{ ansible_env.HOME }}/bin"
+    path: "{{ ansible_facts['env']['HOME'] }}/bin"
     state: directory
     mode: '0755'
 
 - name: Ensure git helpers directory exists
   file:
-    path: "{{ ansible_env.HOME }}/git"
+    path: "{{ ansible_facts['env']['HOME'] }}/git"
     state: directory
     mode: '0755'
 
 - name: Link githelpers (if exists)
   file:
     src: "{{ dotfiles_home }}/roles/git/files/githelpers.link"
-    dest: "{{ ansible_env.HOME }}/git/githelpers"
+    dest: "{{ ansible_facts['env']['HOME'] }}/git/githelpers"
     state: link
     force: yes
   ignore_errors: yes

@@ -1,0 +1,24 @@
+---
+# =============================================================================
+# Aerospace Role - i3-like tiling window manager for macOS
+# =============================================================================
+
+- name: Install Aerospace
+  homebrew_cask:
+    name: nikitabobko/tap/aerospace
+    state: present
+
+- name: Link Aerospace config
+  file:
+    src: "{{ dotfiles_home }}/roles/aerospace/files/aerospace.toml"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.aerospace.toml"
+    state: link
+    force: yes
+
+- name: Remind user to grant permissions
+  debug:
+    msg: |
+      Aerospace installed! To complete setup:
+      1. Open System Settings > Privacy & Security > Accessibility
+      2. Add and enable Aerospace
+      3. Run 'aerospace' or enable "Start at login" in config

@@ -4,15 +4,19 @@
 # Sets up minikube for local Kubernetes development.
 #
 # Uses Podman as the preferred container driver (rootless, daemonless).
-# kubectl, kubectx, helm installed via packages/macos-work.yml
+# Podman is installed via the packages role.
 #
-# After install, start minikube with:
+# After install:
+#   # macOS: Initialize Podman machine first
+#   podman machine init && podman machine start
+#
+#   # All platforms: Start minikube
 #   minikube start --driver=podman
 # =============================================================================
 
 - import_tasks: linux.yml
-  when: ansible_system == "Linux"
+  when: ansible_facts['system'] == "Linux"
 
 - import_tasks: macos.yml
-  when: ansible_os_family == "Darwin"
+  when: ansible_facts['os_family'] == "Darwin"
 

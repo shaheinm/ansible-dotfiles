@@ -1,0 +1,46 @@
+# =============================================================================
+# Lazygit Configuration
+# =============================================================================
+
+gui:
+  theme:
+    lightTheme: false
+    activeBorderColor:
+      - cyan
+      - bold
+    inactiveBorderColor:
+      - white
+    selectedLineBgColor:
+      - default
+    selectedRangeBgColor:
+      - blue
+  showIcons: true
+  nerdFontsVersion: "3"
+  showBottomLine: true
+  showCommandLog: true
+  showRandomTip: false
+  border: rounded
+
+git:
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never
+  autoFetch: true
+  autoRefresh: true
+  branchLogCmd: git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium {{branchName}} --
+
+os:
+  editPreset: nvim
+
+keybinding:
+  universal:
+    quit: q
+    return: <esc>
+    togglePanel: <tab>
+    prevBlock: <left>
+    nextBlock: <right>
+    scrollUpMain: <pgup>
+    scrollDownMain: <pgdown>
+
+confirmOnQuit: false
+quitOnTopLevelReturn: true

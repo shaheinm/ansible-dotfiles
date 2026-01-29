@@ -1,16 +1,16 @@
 - name: Check if bashrc already exists
-  stat: path="{{ ansible_env.HOME }}/.bashrc"
+  stat: path="{{ ansible_facts['env']['HOME'] }}/.bashrc"
   register: bashrc_stat
 
 - name: Back up bashrc if it exists
   command: mv ~/.bashrc ~/.bashrc.old
   args:
-    creates: "{{ ansible_env.HOME }}/.zshrc.bak"
+    creates: "{{ ansible_facts['env']['HOME'] }}/.zshrc.bak"
   when: bashrc_stat.stat.exists
 
 - name: Link bashrc
   file:
     src: "{{ dotfiles_home }}/roles/bash/files/bashrc.link"
-    dest: "{{ ansible_env.HOME }}/.bashrc"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.bashrc"
     state: link
 

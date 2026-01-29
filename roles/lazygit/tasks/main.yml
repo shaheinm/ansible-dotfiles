@@ -1,0 +1,17 @@
+---
+# =============================================================================
+# Lazygit Role - Terminal UI for git
+# =============================================================================
+
+- name: Ensure lazygit config directory exists
+  file:
+    path: "{{ config_home }}/lazygit"
+    state: directory
+    mode: '0755'
+
+- name: Link lazygit config
+  file:
+    src: "{{ dotfiles_home }}/roles/lazygit/files/config.yml"
+    dest: "{{ config_home }}/lazygit/config.yml"
+    state: link
+    force: yes

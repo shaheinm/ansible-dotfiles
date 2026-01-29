@@ -1,25 +1,40 @@
 # Dotfiles - Ansible Style
 
-Reproducible development environment configuration managed with Ansible.
+Reproducible, Linux-first development environment configuration managed with Ansible.
 
 ## Overview
 
-This repository is the **single source of truth** for my development environment. It manages:
+This repository is the **single source of truth** for my development environment. Designed for Linux with macOS support for work machines.
 
+**Core (all platforms):**
 - **Neovim** - Modern Lua-based configuration with native LSP (Neovim 0.11+)
-- **Zsh** - Clean shell config with Starship prompt
-- **Git** - Aliases, colors, diff-so-fancy
+- **Zsh** - Clean shell config with modern CLI tools (eza, bat, zoxide)
+- **Git** - Aliases, colors, diff-so-fancy, lazygit
 - **Starship** - Minimal cross-shell prompt
-- **Packages** - Homebrew (macOS) / apt/dnf (Linux)
+- **SSH** - Client configuration with sensible defaults
+- **ondir** - Centralized per-directory environment management (~/.ondirrc)
 - **Languages** - Python, Go, Node.js via asdf
+
+**Linux:**
+- **Sway** - i3-compatible tiling WM (Wayland)
+- **Packages** - Native package managers (apt, dnf, pacman)
+
+**macOS (work machine support):**
+- **Aerospace** - i3-like tiling WM (matches Sway keybindings)
+- **Packages** - Homebrew
+- **macOS defaults** - Keyboard, Dock, Finder preferences
 
 ## Quick Start
 
 ### Prerequisites
 
-- Ansible installed (`brew install ansible` or `pip install ansible`)
+**Linux:**
+- Ansible (`sudo dnf install ansible` / `sudo pacman -S ansible` / `sudo apt install ansible`)
 - Git
-- For macOS: Homebrew (`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`)
+
+**macOS (work machines):**
+- Homebrew (`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`)
+- Ansible (`brew install ansible`)
 
 ### Run the Playbook
 
@@ -72,10 +87,16 @@ ansible-dotfiles/
 ├── roles/
 │   ├── packages/             # Package installation (Homebrew/apt/dnf)
 │   ├── git/                  # Git configuration + aliases
+│   ├── ssh/                  # SSH client configuration
 │   ├── zsh/                  # Zsh configuration
 │   ├── bash/                 # Bash configuration (tagged: never)
 │   ├── starship/             # Starship prompt
 │   ├── nvim/                 # Neovim configuration (native LSP)
+│   ├── lazygit/              # Lazygit TUI configuration
+│   ├── ripgrep/              # Ripgrep configuration
+│   ├── sway/                 # Sway tiling WM (Linux/Wayland)
+│   ├── macos/                # macOS system defaults
+│   ├── aerospace/            # i3-like tiling WM (macOS)
 │   ├── kube/                 # Kubernetes + Podman/minikube
 │   └── node/                 # NVM setup (legacy, tagged: never)
 └── README.md
@@ -93,6 +114,11 @@ ansible-dotfiles/
 | `roles/nvim/files/lua/` | `~/.config/nvim/lua/` |
 | `roles/git/files/gitignore_global.link` | `~/.gitignore_global` |
 | `roles/git/templates/gitconfig.j2` | `~/.gitconfig` (templated) |
+| `roles/ssh/templates/config.j2` | `~/.ssh/config` (templated) |
+| `roles/lazygit/files/config.yml` | `~/.config/lazygit/config.yml` |
+| `roles/ripgrep/files/ripgreprc` | `~/.ripgreprc` |
+| `roles/sway/files/config` | `~/.config/sway/config` |
+| `roles/aerospace/files/aerospace.toml` | `~/.aerospace.toml` |
 
 ### Neovim Plugins (~32 total)
 
@@ -138,12 +164,31 @@ ansible-dotfiles/
 
 **macOS Core (Homebrew):**
 - Core tools: neovim, git, fzf, ripgrep, fd, jq, yq, htop, wget, curl, tree, coreutils
-- Terminal: starship, zsh-syntax-highlighting, zsh-autosuggestions, ondir
-- Git tools: lazygit, diff-so-fancy
+- Modern CLI: bat (better cat), eza (better ls), zoxide (smarter cd), ondir
+- Terminal: starship, zsh-syntax-highlighting, zsh-autosuggestions
+- Git tools: lazygit, diff-so-fancy, git-delta
 - Version manager: asdf
 - Formatters: black, isort, stylua, prettier, shfmt, clang-format
 - Linters: shellcheck, cppcheck
 - Fonts: font-hack-nerd-font
+
+**macOS System (macos role):**
+- Keyboard: Fast key repeat, disable press-and-hold for accents
+- Dock: Auto-hide, no recent apps, minimize to app icon
+- Finder: Show hidden files, extensions, path bar, status bar
+- Screenshots: Save to Downloads, PNG format, no shadow
+- Misc: Disable auto-correct, smart quotes, smart dashes
+
+**Sway (tiling WM - Linux):**
+- Wayland compositor with i3-compatible config
+- Alt + hjkl for focus, Alt + Shift + hjkl for move
+- Alt + 1-9 for workspaces
+- Alt + f for fullscreen
+- Includes waybar, wofi, swaylock, alacritty
+
+**Aerospace (tiling WM - macOS):**
+- i3/Sway-like tiling window manager for macOS
+- Keybindings match Sway for consistency across platforms
 
 **macOS Work-specific** (run with `--tags packages-work`):
 - Kubernetes: kubectl, kubectx, helm
@@ -159,9 +204,18 @@ ansible-dotfiles/
 - Go (prompted, default: latest)
 - Node.js (prompted, default: latest)
 
-**Linux:**
-- Same core packages via apt/dnf
-- Starship and lazygit installed via curl scripts
+**Linux (primary platform):**
+- Native package managers (apt, dnf, pacman) - no Homebrew
+- Modern CLI tools: bat, eza, zoxide, ondir, delta
+- asdf via git clone for language management
+- Sway tiling WM (Wayland)
+- Formatters/linters installed via pip, npm, and GitHub releases
+- Nerd Fonts installed to ~/.local/share/fonts
+
+**Supported Linux Distributions:**
+- Fedora/RHEL (dnf)
+- Arch Linux (pacman)
+- Debian/Ubuntu (apt)
 
 ### Starship Prompt
 
@@ -195,21 +249,31 @@ The zshrc sources these files if they exist:
 
 ## Platform Differences
 
-### macOS
+### Linux (Fedora/RHEL)
 
-- Uses Homebrew for packages
-- asdf installed via Homebrew: `source $(brew --prefix asdf)/libexec/asdf.sh`
+- Uses dnf for packages (most tools available natively)
+- asdf installed via git clone: `source ~/.asdf/asdf.sh`
+- Sway for tiling WM
+
+### Linux (Arch)
+
+- Uses pacman for packages (all tools available natively)
+- asdf via git clone
+- Sway for tiling WM
 
 ### Linux (Debian/Ubuntu)
 
 - Uses apt for packages
+- Some tools installed via GitHub releases (eza, zoxide, delta, stylua, shfmt)
 - asdf installed via git clone: `source ~/.asdf/asdf.sh`
-- Starship installed via curl script
+- Starship and lazygit installed via curl scripts
+- Sway for tiling WM
 
-### Linux (Fedora/RHEL)
+### macOS (work machine)
 
-- Uses dnf for packages
-- Same as Debian otherwise
+- Uses Homebrew for packages
+- asdf installed via Homebrew: `source $(brew --prefix asdf)/libexec/asdf.sh`
+- Aerospace for tiling WM (same keybindings as Sway)
 
 ## Post-Installation
 
@@ -232,7 +296,13 @@ After running the playbook:
    node --version
    ```
 
-4. **Set up Podman** (if using kube role):
+4. **Configure ondir** (optional - edit ~/.ondirrc for per-directory environments)
+
+5. **Set up tiling WM:**
+   - Linux: Log out and select Sway from your display manager, or run `sway` from TTY
+   - macOS: Grant Aerospace permissions in System Settings > Privacy & Security > Accessibility
+
+6. **Set up Podman** (if using kube role):
    ```bash
    # macOS only - initialize Podman machine
    podman machine init
@@ -241,6 +311,8 @@ After running the playbook:
    # Start minikube with Podman
    minikube start --driver=podman
    ```
+
+7. **Log out and back in** for macOS defaults to take effect
 
 ## Troubleshooting
 
@@ -294,6 +366,8 @@ This repo replaces the previous `~/.dotfiles` approach with:
 - Native Neovim 0.11+ LSP (no lspconfig deprecation warnings)
 - Cleaner, faster neovim config (58 → ~30 plugins)
 - Starship prompt (replaced Powerlevel10k + Oh My Zsh)
+- Modern CLI tools: eza, bat, zoxide (better ls, cat, cd)
+- Consistent tiling WM: Sway (Linux) / Aerospace (macOS) with matching keybindings
 - Single version manager (asdf replaces nvm, pyenv, gimme)
 - Podman preferred over Docker (rootless, daemonless)
 - Interactive language version prompts

@@ -1,0 +1,166 @@
+# =============================================================================
+# Sway Configuration - i3-compatible tiling WM for Linux (Wayland)
+# =============================================================================
+# Keybindings match Aerospace config for consistency across macOS/Linux
+# For i3 (X11), this config should work with minimal changes
+
+# Mod key (Alt - matches Aerospace)
+set $mod Mod1
+
+# Terminal
+set $term alacritty
+
+# Application launcher
+set $menu wofi --show drun
+
+# =============================================================================
+# Appearance
+# =============================================================================
+
+# Gaps (matching Aerospace)
+gaps inner 8
+gaps outer 8
+
+# Border
+default_border pixel 2
+default_floating_border pixel 2
+
+# Colors (oxocarbon-inspired)
+# class                 border  backgr. text    indicator child_border
+client.focused          #78a9ff #161616 #f2f4f8 #78a9ff   #78a9ff
+client.focused_inactive #525252 #161616 #f2f4f8 #525252   #525252
+client.unfocused        #393939 #161616 #f2f4f8 #393939   #393939
+client.urgent           #ee5396 #161616 #f2f4f8 #ee5396   #ee5396
+
+# Font
+font pango:Hack Nerd Font 10
+
+# =============================================================================
+# Key Bindings - Focus (matching Aerospace: Alt + hjkl)
+# =============================================================================
+
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# Arrow keys alternative
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# =============================================================================
+# Key Bindings - Move (matching Aerospace: Alt + Shift + hjkl)
+# =============================================================================
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# Arrow keys alternative
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# =============================================================================
+# Key Bindings - Resize
+# =============================================================================
+
+bindsym $mod+minus resize shrink width 50px
+bindsym $mod+equal resize grow width 50px
+bindsym $mod+Shift+minus resize shrink height 50px
+bindsym $mod+Shift+equal resize grow height 50px
+
+# =============================================================================
+# Key Bindings - Layout
+# =============================================================================
+
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+
+# Split orientation
+bindsym $mod+backslash split h
+bindsym $mod+Shift+backslash split v
+
+# Layout modes
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# =============================================================================
+# Key Bindings - Workspaces (matching Aerospace: Alt + 1-9)
+# =============================================================================
+
+# Switch to workspace
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+
+# Move container to workspace (matching Aerospace: Alt + Shift + 1-9)
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+
+# =============================================================================
+# Key Bindings - Applications
+# =============================================================================
+
+bindsym $mod+Return exec $term
+bindsym $mod+d exec $menu
+bindsym $mod+q kill
+
+# Reload/restart
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
+
+# =============================================================================
+# Startup
+# =============================================================================
+
+# Wallpaper
+output * bg #161616 solid_color
+
+# Status bar
+bar {
+    position top
+    status_command waybar
+    colors {
+        statusline #f2f4f8
+        background #161616
+        focused_workspace #78a9ff #78a9ff #161616
+        inactive_workspace #393939 #393939 #f2f4f8
+    }
+}
+
+# Idle configuration
+exec swayidle -w \
+    timeout 300 'swaylock -f -c 161616' \
+    timeout 600 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    before-sleep 'swaylock -f -c 161616'
+
+# Input configuration (example for touchpad)
+input type:touchpad {
+    tap enabled
+    natural_scroll enabled
+}
+
+# Include additional config files
+include /etc/sway/config.d/*

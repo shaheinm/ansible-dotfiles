@@ -1,0 +1,29 @@
+---
+# =============================================================================
+# SSH Role - SSH client configuration
+# =============================================================================
+
+- name: Ensure .ssh directory exists
+  file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.ssh"
+    state: directory
+    mode: '0700'
+
+- name: Check if ssh config exists
+  stat:
+    path: "{{ ansible_facts['env']['HOME'] }}/.ssh/config"
+  register: ssh_config_stat
+
+- name: Back up existing ssh config
+  copy:
+    src: "{{ ansible_facts['env']['HOME'] }}/.ssh/config"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.ssh/config.bak"
+    remote_src: yes
+    mode: '0600'
+  when: ssh_config_stat.stat.exists and not ssh_config_stat.stat.islnk
+
+- name: Template ssh config
+  template:
+    src: config.j2
+    dest: "{{ ansible_facts['env']['HOME'] }}/.ssh/config"
+    mode: '0600'

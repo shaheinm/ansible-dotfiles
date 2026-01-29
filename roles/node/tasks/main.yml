@@ -14,21 +14,21 @@
 
 - name: Check if nvm folder exists
   stat:
-    path: "{{ ansible_env.HOME }}/.nvm"
+    path: "{{ ansible_facts['env']['HOME'] }}/.nvm"
   register: nvm_stat
 
 - name: Download NVM install script
   get_url:
     url: https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh
-    dest: "{{ ansible_env.TMPDIR | default('/tmp') }}/nvm_install.sh"
+    dest: "{{ ansible_facts['env']['TMPDIR'] | default('/tmp') }}/nvm_install.sh"
     mode: '0755'
   when: not nvm_stat.stat.exists
 
 - name: Run NVM install script
-  command: "bash {{ ansible_env.TMPDIR | default('/tmp') }}/nvm_install.sh"
+  command: "bash {{ ansible_facts['env']['TMPDIR'] | default('/tmp') }}/nvm_install.sh"
   when: not nvm_stat.stat.exists
 
 - name: Clean up NVM install script
   file:
-    path: "{{ ansible_env.TMPDIR | default('/tmp') }}/nvm_install.sh"
+    path: "{{ ansible_facts['env']['TMPDIR'] | default('/tmp') }}/nvm_install.sh"
     state: absent

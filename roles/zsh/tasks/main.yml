@@ -2,7 +2,7 @@
 - name: Link zshrc
   file:
     src: "{{ dotfiles_home }}/roles/zsh/files/zshrc.link"
-    dest: "{{ ansible_env.HOME }}/.zshrc"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
     state: link
     force: yes
 
@@ -11,5 +11,5 @@
     name: "{{ ansible_user_id }}"
     shell: /bin/zsh
   become: yes
-  when: ansible_os_family == "Darwin" or ansible_os_family == "Debian" or ansible_os_family == "RedHat"
+  when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "RedHat"
   ignore_errors: yes

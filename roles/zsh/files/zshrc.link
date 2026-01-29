@@ -8,6 +8,11 @@ export TERM=xterm-256color
 export XDG_CONFIG_HOME="$HOME/.config"
 export DOTFILES="$HOME/dev/ansible-dotfiles"
 
+# -- Helper function (must be early) ------------------------------------------
+exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
 # -- Zsh Options ---------------------------------------------------------------
 HISTSIZE=10000
 SAVEHIST=10000
@@ -50,9 +55,23 @@ fi
 # -- Aliases -------------------------------------------------------------------
 alias vim=nvim
 alias vi=nvim
-alias ls="ls -FAl"
-alias ll="ls -lah"
 alias work="cd ~/dev"
+
+# Modern CLI tools
+if exists eza; then
+  alias ls='eza -la --icons --git'
+  alias ll='eza -la --icons --git'
+  alias la='eza -la --icons --git'
+  alias lt='eza -laT --icons --git --level=2'  # tree view
+else
+  alias ls="ls -FAl"
+  alias ll="ls -lah"
+fi
+
+if exists bat; then
+  alias cat='bat --paging=never'
+  alias catp='bat'  # with paging
+fi
 
 # Podman (preferred over Docker)
 if exists podman; then
@@ -90,11 +109,6 @@ extract() {
     fi
 }
 
-# Check if command exists
-exists() {
-    command -v "$1" >/dev/null 2>&1
-}
-
 # -- fzf -----------------------------------------------------------------------
 if [[ -f ~/.fzf.zsh ]]; then
   source ~/.fzf.zsh
@@ -104,13 +118,13 @@ if [[ -f ~/.fzf.zsh ]]; then
 fi
 
 # -- asdf (single version manager) ---------------------------------------------
-# Homebrew installation (macOS)
-if [[ -f "$(brew --prefix asdf 2>/dev/null)/libexec/asdf.sh" ]]; then
-  source "$(brew --prefix asdf)/libexec/asdf.sh"
-# Git clone installation (Linux or manual)
-elif [[ -d "$HOME/.asdf" ]]; then
+# Git clone installation (Linux or manual) - check first
+if [[ -d "$HOME/.asdf" ]]; then
   source "$HOME/.asdf/asdf.sh"
   fpath=(${ASDF_DIR}/completions $fpath)
+# Homebrew installation (macOS) - only if brew exists
+elif command -v brew &>/dev/null && [[ -f "$(brew --prefix asdf 2>/dev/null)/libexec/asdf.sh" ]]; then
+  source "$(brew --prefix asdf)/libexec/asdf.sh"
 fi
 
 # -- Kubectl -------------------------------------------------------------------
@@ -136,6 +150,12 @@ if exists ondir; then
     eval "`ondir \"$OLDPWD\" \"$PWD\"`"
   }
   add-zsh-hook chpwd eval_ondir
+fi
+
+# -- zoxide (smarter cd) -------------------------------------------------------
+if exists zoxide; then
+  eval "$(zoxide init zsh)"
+  alias cd='z'
 fi
 
 # -- Local config (machine-specific overrides) ---------------------------------

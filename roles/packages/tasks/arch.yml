@@ -1,0 +1,124 @@
+---
+# =============================================================================
+# Arch Linux Package Installation
+# =============================================================================
+# Uses pacman for official packages
+
+- name: Install core packages (Arch)
+  pacman:
+    name:
+      # Core tools
+      - git
+      - neovim
+      - fzf
+      - ripgrep
+      - fd
+      - jq
+      - yq
+      - htop
+      - wget
+      - curl
+      - tree
+      - bat
+      - eza
+      - zoxide
+      - shellcheck
+      - clang
+      - git-delta
+      - ondir
+      - starship
+      - lazygit
+
+      # Zsh plugins
+      - zsh
+      - zsh-syntax-highlighting
+      - zsh-autosuggestions
+
+      # Languages (base - asdf will manage versions)
+      - python
+      - python-pip
+
+      # Container
+      - podman
+
+      # Formatters/Linters
+      - stylua
+      - shfmt
+      - prettier
+      - python-black
+      - python-isort
+    state: present
+    update_cache: yes
+  become: yes
+
+# =============================================================================
+# asdf Version Manager
+# =============================================================================
+
+- name: Clone asdf
+  git:
+    repo: https://github.com/asdf-vm/asdf.git
+    dest: "{{ ansible_facts['env']['HOME'] }}/.asdf"
+    version: v0.14.0
+  register: asdf_clone
+
+- name: Add asdf plugins
+  shell: |
+    source ~/.asdf/asdf.sh
+    asdf plugin add python || true
+    asdf plugin add golang || true
+    asdf plugin add nodejs || true
+    asdf plugin add rust || true
+  args:
+    executable: /bin/bash
+  when: asdf_clone.changed
+  ignore_errors: yes
+
+- name: Install Python {{ python_version }} via asdf
+  shell: |
+    source ~/.asdf/asdf.sh
+    asdf install python {{ python_version }}
+    asdf set -u python {{ python_version }}
+  args:
+    executable: /bin/bash
+  when: python_version != 'skip'
+  ignore_errors: yes
+
+- name: Install Go {{ golang_version }} via asdf
+  shell: |
+    source ~/.asdf/asdf.sh
+    asdf install golang {{ golang_version }}
+    asdf set -u golang {{ golang_version }}
+  args:
+    executable: /bin/bash
+  when: golang_version != 'skip'
+  ignore_errors: yes
+
+- name: Install Node.js {{ nodejs_version }} via asdf
+  shell: |
+    source ~/.asdf/asdf.sh
+    asdf install nodejs {{ nodejs_version }}
+    asdf set -u nodejs {{ nodejs_version }}
+  args:
+    executable: /bin/bash
+  when: nodejs_version != 'skip'
+  ignore_errors: yes
+
+# =============================================================================
+# Nerd Fonts
+# =============================================================================
+
+- name: Create fonts directory
+  file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.local/share/fonts"
+    state: directory
+    mode: '0755'
+
+- name: Install Hack Nerd Font
+  shell: |
+    curl -Lo /tmp/Hack.zip "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip"
+    unzip -o /tmp/Hack.zip -d {{ ansible_facts['env']['HOME'] }}/.local/share/fonts/
+    fc-cache -fv
+    rm -f /tmp/Hack.zip
+  args:
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/share/fonts/HackNerdFont-Regular.ttf"

@@ -24,9 +24,21 @@
   roles:
     - { role: packages, tags: ['packages', 'bootstrap'] }
     - { role: git, tags: ['git', 'bootstrap'] }
+    - { role: ssh, tags: ['ssh', 'bootstrap'] }
     - { role: zsh, tags: ['zsh', 'bootstrap'] }
     - { role: bash, tags: ['bash', 'never'] }
     - { role: starship, tags: ['starship', 'bootstrap'] }
     - { role: nvim, tags: ['nvim', 'bootstrap'] }
+    - { role: lazygit, tags: ['lazygit', 'bootstrap'] }
+    - { role: ripgrep, tags: ['ripgrep', 'bootstrap'] }
+    - role: macos
+      tags: ['macos']
+      when: ansible_facts['os_family'] == 'Darwin'
+    - role: aerospace
+      tags: ['aerospace']
+      when: ansible_facts['os_family'] == 'Darwin'
+    - role: sway
+      tags: ['sway']
+      when: ansible_facts['system'] == 'Linux'
     - { role: node, tags: ['node', 'never'] }
     - { role: kube, tags: ['kube'] }

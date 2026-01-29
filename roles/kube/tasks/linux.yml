@@ -1,22 +1,36 @@
 # =============================================================================
 # Kubernetes Tools - Linux
 # =============================================================================
-# Installs minikube for local Kubernetes development.
-# Uses Docker as the default driver.
+# Installs minikube and kubectl for local Kubernetes development.
+# Uses Podman as the preferred driver (rootless, daemonless).
 #
-# Prerequisites: Docker installed and running
+# After install:
+#   minikube start --driver=podman
 # =============================================================================
+
+# Podman is already installed via packages role
+
+- name: Detect architecture
+  set_fact:
+    linux_arch: "{{ 'arm64' if ansible_facts['architecture'] == 'aarch64' else 'amd64' }}"
 
 - name: Download and install minikube
   get_url:
-    url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    url: "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-{{ linux_arch }}"
     dest: /usr/local/bin/minikube
     mode: '0755'
   become: yes
 
 - name: Download and install kubectl
   get_url:
-    url: https://dl.k8s.io/release/{{ kubectl_version | default('v1.31.0') }}/bin/linux/amd64/kubectl
+    url: "https://dl.k8s.io/release/v1.31.0/bin/linux/{{ linux_arch }}/kubectl"
     dest: /usr/local/bin/kubectl
     mode: '0755'
+  become: yes
+
+- name: Download and install helm
+  shell: |
+    curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+  args:
+    creates: /usr/local/bin/helm
   become: yes

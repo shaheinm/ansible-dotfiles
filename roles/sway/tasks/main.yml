@@ -1,0 +1,91 @@
+---
+# =============================================================================
+# Sway Role - Tiling window manager for Linux (Wayland)
+# =============================================================================
+# Linux equivalent to Aerospace on macOS
+# Also works with i3 (X11) with minimal changes
+
+# =============================================================================
+# Install sway and related tools
+# =============================================================================
+
+- name: Install sway (Fedora)
+  dnf:
+    name:
+      - sway
+      - swaylock
+      - swayidle
+      - waybar
+      - wofi
+      - alacritty
+      - grim        # Screenshots
+      - slurp       # Region selection
+      - wl-clipboard
+    state: present
+  become: yes
+  when: ansible_facts['distribution'] == 'Fedora'
+
+- name: Install sway (Debian/Ubuntu)
+  apt:
+    name:
+      - sway
+      - swaylock
+      - swayidle
+      - waybar
+      - wofi
+      - alacritty
+      - grim
+      - slurp
+      - wl-clipboard
+    state: present
+  become: yes
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Install sway (Arch)
+  pacman:
+    name:
+      - sway
+      - swaylock
+      - swayidle
+      - waybar
+      - wofi
+      - alacritty
+      - grim
+      - slurp
+      - wl-clipboard
+    state: present
+  become: yes
+  when: ansible_facts['os_family'] == 'Archlinux'
+
+# =============================================================================
+# Configuration
+# =============================================================================
+
+- name: Ensure sway config directory exists
+  file:
+    path: "{{ config_home }}/sway"
+    state: directory
+    mode: '0755'
+
+- name: Link sway config
+  file:
+    src: "{{ dotfiles_home }}/roles/sway/files/config"
+    dest: "{{ config_home }}/sway/config"
+    state: link
+    force: yes
+
+- name: Remind user about sway
+  debug:
+    msg: |
+      Sway installed! To use:
+      1. Log out of your current session
+      2. Select 'Sway' from your display manager
+      3. Or run 'sway' from a TTY
+      
+      Keybindings match Aerospace (macOS):
+      - Alt + hjkl: Focus
+      - Alt + Shift + hjkl: Move
+      - Alt + 1-9: Workspaces
+      - Alt + f: Fullscreen
+      - Alt + Return: Terminal
+      - Alt + d: App launcher
