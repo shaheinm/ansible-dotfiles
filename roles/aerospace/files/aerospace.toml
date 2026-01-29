@@ -15,6 +15,29 @@ enable-normalization-flatten-containers = false
 enable-normalization-opposite-orientation-for-nested-containers = true
 
 # =============================================================================
+# Multi-Monitor Workspace Assignment
+# =============================================================================
+# Layout (3 monitors): Left Dell | Retina (center/main) | Right Dell
+#   - Left external:   Workspaces 1-3
+#   - Center (Retina): Workspaces 4-6
+#   - Right external:  Workspaces 7-9
+#
+# When on laptop only, all workspaces fall back to the Retina display.
+# Note: Both Dells are 'secondary' so left/right distribution depends on
+# connection order. For deterministic control, use specific monitor names.
+
+[workspace-to-monitor-force-assignment]
+1 = ['DELL.*\(1\)', '^DELL.*', 'main']
+2 = ['DELL.*\(1\)', '^DELL.*', 'main']
+3 = ['DELL.*\(1\)', '^DELL.*', 'main']
+4 = 'main'
+5 = 'main'
+6 = 'main'
+7 = ['DELL.*\(2\)', '^DELL.*', 'main']
+8 = ['DELL.*\(2\)', '^DELL.*', 'main']
+9 = ['DELL.*\(2\)', '^DELL.*', 'main']
+
+# =============================================================================
 # Gaps
 # =============================================================================
 
@@ -81,9 +104,27 @@ alt-shift-7 = "move-node-to-workspace 7"
 alt-shift-8 = "move-node-to-workspace 8"
 alt-shift-9 = "move-node-to-workspace 9"
 
-# Focus monitors
-alt-tab = "workspace-back-and-forth"
+# -----------------------------------------------------------------------------
+# Multi-Monitor Navigation
+# -----------------------------------------------------------------------------
+
+# Focus monitor by direction
+alt-leftSquareBracket = "focus-monitor left"
+alt-rightSquareBracket = "focus-monitor right"
+
+# Move window to monitor
+alt-shift-leftSquareBracket = "move-node-to-monitor left"
+alt-shift-rightSquareBracket = "move-node-to-monitor right"
+
+# Move entire workspace to another monitor
 alt-shift-tab = "move-workspace-to-monitor --wrap-around next"
+alt-ctrl-tab = "move-workspace-to-monitor --wrap-around prev"
+
+# Cycle through monitors
+alt-tab = "focus-monitor --wrap-around next"
+
+# Quick back-and-forth between workspaces
+alt-backtick = "workspace-back-and-forth"
 
 # Reload config
 alt-shift-c = "reload-config"
