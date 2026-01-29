@@ -4,7 +4,7 @@
     src: "{{ dotfiles_home }}/roles/git/files/gitignore_global.link"
     dest: "{{ ansible_facts['env']['HOME'] }}/.gitignore_global"
     state: link
-    force: yes
+    force: true
 
 - name: Check if gitconfig exists
   stat:
@@ -39,5 +39,5 @@
     src: "{{ dotfiles_home }}/roles/git/files/githelpers.link"
     dest: "{{ ansible_facts['env']['HOME'] }}/git/githelpers"
     state: link
-    force: yes
-  ignore_errors: yes
+    force: true
+  ignore_errors: true

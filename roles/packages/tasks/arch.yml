@@ -48,8 +48,8 @@
       - python-black
       - python-isort
     state: present
-    update_cache: yes
-  become: yes
+    update_cache: true
+  become: true
 
 # =============================================================================
 # asdf Version Manager
@@ -72,7 +72,7 @@
   args:
     executable: /bin/bash
   when: asdf_clone.changed
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install Python {{ python_version }} via asdf
   shell: |
@@ -82,7 +82,7 @@
   args:
     executable: /bin/bash
   when: python_version != 'skip'
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install Go {{ golang_version }} via asdf
   shell: |
@@ -92,7 +92,7 @@
   args:
     executable: /bin/bash
   when: golang_version != 'skip'
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install Node.js {{ nodejs_version }} via asdf
   shell: |
@@ -102,7 +102,7 @@
   args:
     executable: /bin/bash
   when: nodejs_version != 'skip'
-  ignore_errors: yes
+  ignore_errors: true
 
 # =============================================================================
 # Nerd Fonts

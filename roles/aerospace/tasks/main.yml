@@ -13,7 +13,7 @@
     src: "{{ dotfiles_home }}/roles/aerospace/files/aerospace.toml"
     dest: "{{ ansible_facts['env']['HOME'] }}/.aerospace.toml"
     state: link
-    force: yes
+    force: true
 
 - name: Remind user to grant permissions
   debug:

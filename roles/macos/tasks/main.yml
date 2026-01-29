@@ -206,11 +206,11 @@
 
 - name: Restart Finder to apply changes
   shell: killall Finder || true
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Restart Dock to apply changes
   shell: killall Dock || true
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Remind user to logout
   debug:

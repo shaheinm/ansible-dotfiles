@@ -10,4 +10,4 @@
     src: "{{ dotfiles_home }}/roles/starship/files/starship.toml"
     dest: "{{ config_home }}/starship.toml"
     state: link
-    force: yes
+    force: true

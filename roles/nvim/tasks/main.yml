@@ -19,14 +19,14 @@
     src: "{{ dotfiles_home }}/roles/nvim/files/init.lua"
     dest: "{{ config_home }}/nvim/init.lua"
     state: link
-    force: yes
+    force: true
 
 - name: Link neovim lua directory
   file:
     src: "{{ dotfiles_home }}/roles/nvim/files/lua"
     dest: "{{ config_home }}/nvim/lua"
     state: link
-    force: yes
+    force: true
 
 - name: Ensure nvim data directory exists
   file:

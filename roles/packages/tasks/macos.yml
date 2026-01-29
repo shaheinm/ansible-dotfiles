@@ -5,7 +5,7 @@
 
 - name: Update Homebrew
   homebrew:
-    update_homebrew: yes
+    update_homebrew: true
 
 - name: Install core tools
   homebrew:
@@ -79,7 +79,7 @@
     name:
       - font-hack-nerd-font
     state: present
-  ignore_errors: yes
+  ignore_errors: true
 
 # =============================================================================
 # asdf Version Manager Setup
@@ -94,7 +94,7 @@
     asdf plugin add rust || true
   args:
     executable: /bin/zsh
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install Python {{ python_version }} via asdf
   shell: |
@@ -104,7 +104,7 @@
   args:
     executable: /bin/zsh
   when: python_version != 'skip'
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install Go {{ golang_version }} via asdf
   shell: |
@@ -114,7 +114,7 @@
   args:
     executable: /bin/zsh
   when: golang_version != 'skip'
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install Node.js {{ nodejs_version }} via asdf
   shell: |
@@ -124,7 +124,7 @@
   args:
     executable: /bin/zsh
   when: nodejs_version != 'skip'
-  ignore_errors: yes
+  ignore_errors: true
 
 # =============================================================================
 # Cleanup - Remove redundant packages
@@ -138,4 +138,4 @@
       - macvim          # Using neovim instead
       - the_silver_searcher  # ripgrep is better
     state: absent
-  ignore_errors: yes
+  ignore_errors: true

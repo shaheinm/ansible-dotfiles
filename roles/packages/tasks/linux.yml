@@ -43,8 +43,8 @@
       # Container
       - podman
     state: present
-    update_cache: yes
-  become: yes
+    update_cache: true
+  become: true
   when: ansible_facts['os_family'] == "Debian"
 
 # Tools not in apt - install via GitHub releases or other methods
@@ -56,7 +56,7 @@
     rm -f /tmp/eza /tmp/eza.tar.gz
   args:
     creates: /usr/local/bin/eza
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == "Debian"
 
 - name: Install zoxide (Debian/Ubuntu)
@@ -72,7 +72,7 @@
     chmod +x /usr/local/bin/yq
   args:
     creates: /usr/local/bin/yq
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == "Debian"
 
 - name: Install delta (Debian/Ubuntu)
@@ -82,7 +82,7 @@
     rm -f /tmp/delta.deb
   args:
     creates: /usr/bin/delta
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == "Debian"
 
 - name: Install ondir from source (Debian/Ubuntu)
@@ -93,7 +93,7 @@
     rm -rf /tmp/ondir
   args:
     creates: /usr/local/bin/ondir
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == "Debian"
 
 # =============================================================================
@@ -130,7 +130,7 @@
       # Container
       - podman
     state: present
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == "RedHat"
 
 # Tools not in standard Fedora repos - install via GitHub releases
@@ -142,7 +142,7 @@
     rm -f /tmp/eza /tmp/eza.tar.gz
   args:
     creates: /usr/local/bin/eza
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == "RedHat"
 
 - name: Install yq (Fedora)
@@ -151,16 +151,16 @@
     chmod +x /usr/local/bin/yq
   args:
     creates: /usr/local/bin/yq
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == "RedHat"
 
 - name: Install delta (Fedora)
   dnf:
     name: git-delta
     state: present
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == "RedHat"
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install ondir from source (Fedora)
   shell: |
@@ -170,7 +170,7 @@
     rm -rf /tmp/ondir
   args:
     creates: /usr/local/bin/ondir
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == "RedHat"
 
 # =============================================================================
@@ -182,7 +182,7 @@
     curl -sS https://starship.rs/install.sh | sh -s -- -y
   args:
     creates: /usr/local/bin/starship
-  become: yes
+  become: true
 
 - name: Install lazygit
   shell: |
@@ -193,7 +193,7 @@
     rm lazygit lazygit.tar.gz
   args:
     creates: /usr/local/bin/lazygit
-  become: yes
+  become: true
 
 # =============================================================================
 # asdf Version Manager
@@ -216,7 +216,7 @@
   args:
     executable: /bin/bash
   when: asdf_clone.changed or not ansible_facts['env']['HOME'] | regex_search('.asdf')
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install Python {{ python_version }} via asdf
   shell: |
@@ -226,7 +226,7 @@
   args:
     executable: /bin/bash
   when: python_version != 'skip'
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install Go {{ golang_version }} via asdf
   shell: |
@@ -236,7 +236,7 @@
   args:
     executable: /bin/bash
   when: golang_version != 'skip'
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install Node.js {{ nodejs_version }} via asdf
   shell: |
@@ -246,7 +246,7 @@
   args:
     executable: /bin/bash
   when: nodejs_version != 'skip'
-  ignore_errors: yes
+  ignore_errors: true
 
 # =============================================================================
 # Nerd Fonts
@@ -275,7 +275,7 @@
   shell: pip3 install --user black isort
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/black"
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install stylua (Debian/Ubuntu)
   shell: |
@@ -285,7 +285,7 @@
     rm -f /tmp/stylua /tmp/stylua.zip
   args:
     creates: /usr/local/bin/stylua
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == "Debian"
 
 - name: Install shfmt (Debian/Ubuntu)
@@ -294,12 +294,12 @@
     chmod +x /usr/local/bin/shfmt
   args:
     creates: /usr/local/bin/shfmt
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == "Debian"
 
 - name: Install prettier via npm
   npm:
     name: prettier
-    global: yes
-  become: yes
-  ignore_errors: yes
+    global: true
+  become: true
+  ignore_errors: true

@@ -22,7 +22,7 @@
       - slurp       # Region selection
       - wl-clipboard
     state: present
-  become: yes
+  become: true
   when: ansible_facts['distribution'] == 'Fedora'
 
 - name: Install sway (Debian/Ubuntu)
@@ -38,7 +38,7 @@
       - slurp
       - wl-clipboard
     state: present
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == 'Debian'
 
 - name: Install sway (Arch)
@@ -54,7 +54,7 @@
       - slurp
       - wl-clipboard
     state: present
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == 'Archlinux'
 
 # =============================================================================
@@ -72,7 +72,7 @@
     src: "{{ dotfiles_home }}/roles/sway/files/config"
     dest: "{{ config_home }}/sway/config"
     state: link
-    force: yes
+    force: true
 
 - name: Remind user about sway
   debug:

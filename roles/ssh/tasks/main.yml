@@ -18,7 +18,7 @@
   copy:
     src: "{{ ansible_facts['env']['HOME'] }}/.ssh/config"
     dest: "{{ ansible_facts['env']['HOME'] }}/.ssh/config.bak"
-    remote_src: yes
+    remote_src: true
     mode: '0600'
   when: ssh_config_stat.stat.exists and not ssh_config_stat.stat.islnk
 

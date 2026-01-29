@@ -36,13 +36,13 @@
       - postgresql@14    # PostgreSQL database
       - rabbitmq         # Message queue
     state: present
-  ignore_errors: yes
+  ignore_errors: true
 
 # Optional: Start services if needed
 # - name: Start PostgreSQL service
 #   shell: brew services start postgresql@14
-#   ignore_errors: yes
+#   ignore_errors: true
 
 # - name: Start RabbitMQ service
 #   shell: brew services start rabbitmq
-#   ignore_errors: yes
+#   ignore_errors: true

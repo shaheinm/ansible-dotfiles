@@ -19,18 +19,18 @@
     url: "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-{{ linux_arch }}"
     dest: /usr/local/bin/minikube
     mode: '0755'
-  become: yes
+  become: true
 
 - name: Download and install kubectl
   get_url:
     url: "https://dl.k8s.io/release/v1.31.0/bin/linux/{{ linux_arch }}/kubectl"
     dest: /usr/local/bin/kubectl
     mode: '0755'
-  become: yes
+  become: true
 
 - name: Download and install helm
   shell: |
     curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
   args:
     creates: /usr/local/bin/helm
-  become: yes
+  become: true

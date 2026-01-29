@@ -14,4 +14,4 @@
     src: "{{ dotfiles_home }}/roles/lazygit/files/config.yml"
     dest: "{{ config_home }}/lazygit/config.yml"
     state: link
-    force: yes
+    force: true

@@ -4,12 +4,12 @@
     src: "{{ dotfiles_home }}/roles/zsh/files/zshrc.link"
     dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
     state: link
-    force: yes
+    force: true
 
 - name: Ensure zsh is the default shell
   user:
     name: "{{ ansible_user_id }}"
     shell: /bin/zsh
-  become: yes
+  become: true
   when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "Debian" or ansible_facts['os_family'] == "RedHat"
-  ignore_errors: yes
+  ignore_errors: true

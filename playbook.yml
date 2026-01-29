@@ -1,7 +1,7 @@
 ---
 - name: Collecting Facts
   hosts: local
-  gather_facts: yes
+  gather_facts: true
 
 - name: Set up local dev environment
   hosts: local
@@ -9,17 +9,17 @@
     - name: python_version
       prompt: "Python version to install (e.g., 3.12.3, latest, or 'skip' to skip)"
       default: "latest"
-      private: no
+      private: false
 
     - name: golang_version
       prompt: "Go version to install (e.g., 1.23.2, latest, or 'skip' to skip)"
       default: "latest"
-      private: no
+      private: false
 
     - name: nodejs_version
       prompt: "Node.js version to install (e.g., 20.10.0, latest, or 'skip' to skip)"
       default: "latest"
-      private: no
+      private: false
 
   roles:
     - { role: packages, tags: ['packages', 'bootstrap'] }
