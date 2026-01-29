@@ -1,4 +1,6 @@
 -- Treesitter configuration
+local has_textobjects = pcall(require, 'nvim-treesitter-textobjects')
+
 require('nvim-treesitter.configs').setup({
   highlight = {
     enable = true,
@@ -12,7 +14,7 @@ require('nvim-treesitter.configs').setup({
       node_decremental = 'gz',
     },
   },
-  textobjects = {
+  textobjects = has_textobjects and {
     select = {
       enable = true,
       lookahead = true,
@@ -51,7 +53,7 @@ require('nvim-treesitter.configs').setup({
         ['[C'] = '@class.outer',
       },
     },
-  },
+  } or nil,
   ensure_installed = {
     'javascript',
     'typescript',
