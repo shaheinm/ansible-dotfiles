@@ -9,11 +9,7 @@
   homebrew:
     name:
       - podman
-    state: present
-
-- name: Install minikube
-  homebrew_cask:
-    name: minikube
+      - minikube
     state: present
 
 # Initialize Podman machine (required on macOS)
