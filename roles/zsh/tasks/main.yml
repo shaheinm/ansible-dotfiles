@@ -6,6 +6,32 @@
     state: link
     force: true
 
+- name: Check if aliases.link exists
+  stat:
+    path: "{{ dotfiles_home }}/roles/zsh/files/aliases.link"
+  register: aliases_file
+
+- name: Link aliases (if exists)
+  file:
+    src: "{{ dotfiles_home }}/roles/zsh/files/aliases.link"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.aliases"
+    state: link
+    force: true
+  when: aliases_file.stat.exists
+
+- name: Check if ondirrc.link exists
+  stat:
+    path: "{{ dotfiles_home }}/roles/zsh/files/ondirrc.link"
+  register: ondirrc_file
+
+- name: Link ondirrc (if exists)
+  file:
+    src: "{{ dotfiles_home }}/roles/zsh/files/ondirrc.link"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.ondirrc"
+    state: link
+    force: true
+  when: ondirrc_file.stat.exists
+
 - name: Ensure zsh is the default shell
   user:
     name: "{{ ansible_user_id }}"

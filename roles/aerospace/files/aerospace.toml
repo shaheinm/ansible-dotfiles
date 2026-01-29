@@ -10,7 +10,8 @@ start-at-login = true
 on-focused-monitor-changed = ["move-mouse monitor-lazy-center"]
 
 # Normalizations
-enable-normalization-flatten-containers = true
+# Disabled to allow manual split commands (i3-like behavior)
+enable-normalization-flatten-containers = false
 enable-normalization-opposite-orientation-for-nested-containers = true
 
 # =============================================================================

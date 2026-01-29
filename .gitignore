@@ -1,0 +1,6 @@
+# Employer/machine-specific configs (not tracked)
+roles/zsh/files/aliases.link
+roles/zsh/files/ondirrc.link
+
+# OS files
+.DS_Store
