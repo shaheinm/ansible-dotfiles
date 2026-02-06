@@ -52,12 +52,10 @@ local on_attach = function(client, bufnr)
   if client.name == "texlab" then
     map("n", "<leader>lf", function()
       local params = {
-        command = "texlab.forwardSearch",
-        arguments = {
-          { uri = vim.uri_from_bufnr(bufnr), position = { line = vim.fn.line('.') - 1, character = 0 } },
-        },
+        textDocument = { uri = vim.uri_from_bufnr(bufnr) },
+        position = { line = vim.fn.line('.') - 1, character = vim.fn.col('.') },
       }
-      client:request("workspace/executeCommand", params, function(err, result)
+      client.request("textDocument/forwardSearch", params, function(err, result)
         if err then
           vim.notify("Forward search error: " .. vim.inspect(err), vim.log.levels.ERROR)
         elseif result and result.status then
