@@ -144,6 +144,9 @@ export PATH="$PATH:$GOPATH/bin"
 # -- Path additions ------------------------------------------------------------
 export PATH="$PATH:$DOTFILES/scripts/bin:$HOME/.local/bin:$HOME/bin"
 
+# -- TeX (MacTeX/BasicTeX) -----------------------------------------------------
+[[ -d /Library/TeX/texbin ]] && export PATH="$PATH:/Library/TeX/texbin"
+
 # -- User Aliases --------------------------------------------------------------
 # Source user-specific aliases
 [[ -f ~/.aliases ]] && source ~/.aliases

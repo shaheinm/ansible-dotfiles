@@ -53,7 +53,21 @@ local on_attach = function(client, bufnr)
     map("n", "<leader>lf", function()
       client:exec_cmd({
         command = "texlab.forwardSearch",
-      }, { bufnr = bufnr })
+      }, { bufnr = bufnr }, function(err, result)
+        if err then
+          vim.notify("Forward search error: " .. vim.inspect(err), vim.log.levels.ERROR)
+        elseif result and result.status then
+          local status_map = {
+            [0] = "Success",
+            [1] = "Error: PDF not found (build first)",
+            [2] = "Error: No Skim configured",
+            [3] = "Error: Skim not running",
+          }
+          if result.status ~= 0 then
+            vim.notify(status_map[result.status] or ("Forward search status: " .. result.status), vim.log.levels.WARN)
+          end
+        end
+      end)
     end, { desc = "Forward search (PDF)" })
   end
 
