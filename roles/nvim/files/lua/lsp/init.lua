@@ -48,6 +48,13 @@ local on_attach = function(client, bufnr)
   map("n", "<leader>lwa", vim.lsp.buf.add_workspace_folder, { desc = "Add workspace folder" })
   map("n", "<leader>lwr", vim.lsp.buf.remove_workspace_folder, { desc = "Remove workspace folder" })
 
+  -- LaTeX forward search (texlab only)
+  if client.name == "texlab" then
+    map("n", "<leader>lf", function()
+      vim.lsp.buf.execute_command({ command = "texlab.forwardSearch" })
+    end, { desc = "Forward search (PDF)" })
+  end
+
   -- Inlay hints
   if client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })

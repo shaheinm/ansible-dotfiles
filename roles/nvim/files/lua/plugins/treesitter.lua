@@ -8,7 +8,7 @@ if ok and ts.setup then
       'javascript', 'typescript', 'tsx', 'python', 'go', 'rust',
       'c', 'cpp', 'html', 'css', 'json', 'yaml', 'toml', 'lua',
       'vim', 'vimdoc', 'bash', 'dockerfile', 'gitignore', 'gitcommit',
-      'markdown', 'markdown_inline',
+      'markdown', 'markdown_inline', 'latex', 'bibtex',
     },
   })
 else
@@ -30,7 +30,7 @@ else
       'javascript', 'typescript', 'tsx', 'python', 'go', 'rust',
       'c', 'cpp', 'html', 'css', 'json', 'yaml', 'toml', 'lua',
       'vim', 'vimdoc', 'bash', 'dockerfile', 'gitignore', 'gitcommit',
-      'markdown', 'markdown_inline',
+      'markdown', 'markdown_inline', 'latex', 'bibtex',
     },
   })
 end

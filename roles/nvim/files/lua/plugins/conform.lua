@@ -19,6 +19,10 @@ require("conform").setup({
     html = { "prettier" },
     css = { "prettier" },
 
+    -- LaTeX
+    tex = { "latexindent" },
+    plaintex = { "latexindent" },
+
     -- Shell
     sh = { "shfmt" },
     bash = { "shfmt" },
