@@ -209,6 +209,16 @@
     creates: /usr/local/bin/texlab
   become: true
 
+- name: Install tex-fmt (LaTeX formatter)
+  shell: |
+    curl -Lo /tmp/tex-fmt.tar.gz "https://github.com/WGUNDERWOOD/tex-fmt/releases/latest/download/tex-fmt-x86_64-unknown-linux-gnu.tar.gz"
+    tar xf /tmp/tex-fmt.tar.gz -C /tmp
+    install /tmp/tex-fmt /usr/local/bin/tex-fmt
+    rm -f /tmp/tex-fmt /tmp/tex-fmt.tar.gz
+  args:
+    creates: /usr/local/bin/tex-fmt
+  become: true
+
 - name: Install starship prompt
   shell: |
     curl -sS https://starship.rs/install.sh | sh -s -- -y

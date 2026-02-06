@@ -49,6 +49,7 @@
       - zathura-pdf-poppler
 
       # Formatters/Linters
+      # Note: tex-fmt available from AUR (tex-fmt-bin) or installed below via GitHub
       - stylua
       - shfmt
       - prettier
@@ -56,6 +57,17 @@
       - python-isort
     state: present
     update_cache: true
+  become: true
+
+# tex-fmt (not in official repos, install from GitHub)
+- name: Install tex-fmt (LaTeX formatter)
+  shell: |
+    curl -Lo /tmp/tex-fmt.tar.gz "https://github.com/WGUNDERWOOD/tex-fmt/releases/latest/download/tex-fmt-x86_64-unknown-linux-gnu.tar.gz"
+    tar xf /tmp/tex-fmt.tar.gz -C /tmp
+    install /tmp/tex-fmt /usr/local/bin/tex-fmt
+    rm -f /tmp/tex-fmt /tmp/tex-fmt.tar.gz
+  args:
+    creates: /usr/local/bin/tex-fmt
   become: true
 
 # =============================================================================

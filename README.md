@@ -156,9 +156,24 @@ ansible-dotfiles/
 | gopls | Go | go.mod, go.work |
 | eslint | JavaScript/TypeScript | .eslintrc, package.json |
 | clangd | C/C++ | compile_commands.json, .clangd |
+| texlab | LaTeX | .latexmkrc, Tectonic.toml |
 | bashls | Bash/Shell | .git |
 | yamlls | YAML | - |
 | jsonls | JSON | - |
+
+### LaTeX Support
+
+Full LaTeX editing support with:
+- **texlab** - LSP server (completion, diagnostics, build-on-save)
+- **tex-fmt** - Fast Rust-based formatter (no Perl dependencies)
+- **MacTeX/TeX Live** - Full LaTeX distribution
+- **Skim** (macOS) / **Zathura** (Linux) - PDF viewer with SyncTeX
+- **Treesitter** - Syntax highlighting for latex and bibtex
+
+**Keybindings (in .tex files):**
+- `<leader>lf` - Forward search (jump to PDF location)
+- `:w` - Build PDF (build-on-save enabled)
+- `<leader>lf` - Format buffer
 
 ### Packages
 
@@ -168,8 +183,9 @@ ansible-dotfiles/
 - Terminal: starship, zsh-syntax-highlighting, zsh-autosuggestions
 - Git tools: lazygit, diff-so-fancy, git-delta
 - Version manager: asdf
-- Formatters: black, isort, stylua, prettier, shfmt, clang-format
+- Formatters: black, isort, stylua, prettier, shfmt, clang-format, tex-fmt
 - Linters: shellcheck, cppcheck
+- LaTeX: mactex-no-gui, texlab, tex-fmt, skim (PDF viewer)
 - Fonts: font-hack-nerd-font
 
 **macOS System (macos role):**
@@ -209,6 +225,7 @@ ansible-dotfiles/
 - Modern CLI tools: bat, eza, zoxide, ondir, delta
 - asdf via git clone for language management
 - Sway tiling WM (Wayland)
+- LaTeX: texlive, texlab, tex-fmt, zathura (PDF viewer)
 - Formatters/linters installed via pip, npm, and GitHub releases
 - Nerd Fonts installed to ~/.local/share/fonts
 

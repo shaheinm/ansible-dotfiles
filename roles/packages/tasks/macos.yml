@@ -84,10 +84,11 @@
   ignore_errors: true
   # Note: Run playbook with -K flag if this stalls (needs sudo)
 
-- name: Install texlab LSP
+- name: Install texlab LSP and tex-fmt formatter
   homebrew:
     name:
       - texlab
+      - tex-fmt
     state: present
 
 - name: Install Skim PDF viewer (for SyncTeX)

@@ -19,9 +19,11 @@ require("conform").setup({
     html = { "prettier" },
     css = { "prettier" },
 
-    -- LaTeX
-    tex = { "latexindent" },
-    plaintex = { "latexindent" },
+    -- LaTeX (tex-fmt is faster and has no Perl dependencies)
+    tex = { "tex-fmt" },
+    plaintex = { "tex-fmt" },
+    -- Alternative: use latexindent (requires Perl modules: cpan File::HomeDir Log::Log4perl YAML::Tiny)
+    -- tex = { "latexindent" },
 
     -- Shell
     sh = { "shfmt" },
