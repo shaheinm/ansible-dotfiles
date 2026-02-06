@@ -8,6 +8,12 @@
 	email = {{ git_email }}
 {% if git_signing_key is defined %}
 	signingkey = {{ git_signing_key }}
+
+[gpg]
+	format = ssh
+
+[commit]
+	gpgsign = true
 {% endif %}
 
 [alias]

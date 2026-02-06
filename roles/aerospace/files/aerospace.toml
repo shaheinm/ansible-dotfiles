@@ -3,6 +3,9 @@
 # =============================================================================
 # Docs: https://nikitabobko.github.io/AeroSpace/guide
 
+# Config version for compatibility (required for AeroSpace 0.20+)
+config-version = 2
+
 # Start Aerospace at login
 start-at-login = true
 

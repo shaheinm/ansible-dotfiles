@@ -117,15 +117,20 @@ if [[ -f ~/.fzf.zsh ]]; then
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
+# -- History search (prefix matching with up/down arrows) ----------------------
+# Type partial command, then use Up/Down to find matching history
+bindkey '^[[A' history-beginning-search-backward  # Up arrow
+bindkey '^[[B' history-beginning-search-forward   # Down arrow
+
 # -- asdf (single version manager) ---------------------------------------------
 # Git clone installation (Linux or manual) - check first
-if [[ -d "$HOME/.asdf" ]]; then
-  source "$HOME/.asdf/asdf.sh"
-  fpath=(${ASDF_DIR}/completions $fpath)
+#if [[ -d "$HOME/.asdf" ]]; then
+#  source "$HOME/.asdf/asdf.sh"
+#  fpath=(${ASDF_DIR}/completions $fpath)
 # Homebrew installation (macOS) - only if brew exists
-elif command -v brew &>/dev/null && [[ -f "$(brew --prefix asdf 2>/dev/null)/libexec/asdf.sh" ]]; then
-  source "$(brew --prefix asdf)/libexec/asdf.sh"
-fi
+#elif command -v brew &>/dev/null && [[ -f "$(brew --prefix asdf 2>/dev/null)/libexec/asdf.sh" ]]; then
+source "$(brew --prefix asdf)/libexec/asdf.sh"
+#fi
 
 # -- Kubectl -------------------------------------------------------------------
 if exists kubectl; then
