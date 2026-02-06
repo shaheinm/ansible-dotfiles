@@ -79,7 +79,10 @@
     name:
       - mactex-no-gui
     state: present
+  environment:
+    HOMEBREW_NO_AUTO_UPDATE: 1
   ignore_errors: true
+  # Note: Run playbook with -K flag if this stalls (needs sudo)
 
 - name: Install texlab LSP
   homebrew:

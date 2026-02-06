@@ -51,7 +51,7 @@ local on_attach = function(client, bufnr)
   -- LaTeX forward search (texlab only)
   if client.name == "texlab" then
     map("n", "<leader>lf", function()
-      vim.lsp.buf.execute_command({ command = "texlab.forwardSearch" })
+      client:request("workspace/executeCommand", { command = "texlab.forwardSearch" })
     end, { desc = "Forward search (PDF)" })
   end
 
