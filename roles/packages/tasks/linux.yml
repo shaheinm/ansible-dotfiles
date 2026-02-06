@@ -47,6 +47,17 @@
   become: true
   when: ansible_facts['os_family'] == "Debian"
 
+- name: Install LaTeX (Debian/Ubuntu)
+  apt:
+    name:
+      - texlive-full
+      - latexmk
+      - zathura
+      - zathura-pdf-poppler
+    state: present
+  become: true
+  when: ansible_facts['os_family'] == "Debian"
+
 # Tools not in apt - install via GitHub releases or other methods
 - name: Install eza (Debian/Ubuntu)
   shell: |
@@ -133,6 +144,17 @@
   become: true
   when: ansible_facts['os_family'] == "RedHat"
 
+- name: Install LaTeX (Fedora)
+  dnf:
+    name:
+      - texlive-scheme-full
+      - latexmk
+      - zathura
+      - zathura-pdf-poppler
+    state: present
+  become: true
+  when: ansible_facts['os_family'] == "RedHat"
+
 # Tools not in standard Fedora repos - install via GitHub releases
 - name: Install eza (Fedora)
   shell: |
@@ -174,8 +196,18 @@
   when: ansible_facts['os_family'] == "RedHat"
 
 # =============================================================================
-# Cross-distro installs (curl scripts)
+# Cross-distro installs (curl scripts / GitHub releases)
 # =============================================================================
+
+- name: Install texlab LSP
+  shell: |
+    curl -Lo /tmp/texlab.tar.gz "https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-linux.tar.gz"
+    tar xf /tmp/texlab.tar.gz -C /tmp
+    install /tmp/texlab /usr/local/bin/texlab
+    rm -f /tmp/texlab /tmp/texlab.tar.gz
+  args:
+    creates: /usr/local/bin/texlab
+  become: true
 
 - name: Install starship prompt
   shell: |

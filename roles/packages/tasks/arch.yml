@@ -41,6 +41,13 @@
       # Container
       - podman
 
+      # LaTeX
+      - texlive-meta
+      - latexmk
+      - texlab
+      - zathura
+      - zathura-pdf-poppler
+
       # Formatters/Linters
       - stylua
       - shfmt

@@ -84,6 +84,32 @@ local servers = {
     },
   },
 
+  -- LaTeX
+  texlab = {
+    cmd = { "texlab" },
+    filetypes = { "tex", "plaintex", "bib" },
+    root_markers = { ".latexmkrc", "latexmkrc", ".texlabroot", "texlabroot", "Tectonic.toml", ".git" },
+    capabilities = capabilities,
+    settings = {
+      texlab = {
+        build = {
+          executable = "latexmk",
+          args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
+          onSave = true,
+        },
+        forwardSearch = vim.fn.has("mac") == 1
+            and {
+              executable = "/Applications/Skim.app/Contents/SharedSupport/displayline",
+              args = { "-g", "%l", "%p", "%f" },
+            }
+          or {
+            executable = "zathura",
+            args = { "--synctex-forward", "%l:1:%f", "%p" },
+          },
+      },
+    },
+  },
+
   -- Rust
   rust_analyzer = {
     cmd = { "rust-analyzer" },

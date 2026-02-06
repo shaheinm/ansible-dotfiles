@@ -74,6 +74,26 @@
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.fzf.zsh"
 
+- name: Install LaTeX (MacTeX)
+  homebrew_cask:
+    name:
+      - mactex-no-gui
+    state: present
+  ignore_errors: true
+
+- name: Install texlab LSP
+  homebrew:
+    name:
+      - texlab
+    state: present
+
+- name: Install Skim PDF viewer (for SyncTeX)
+  homebrew_cask:
+    name:
+      - skim
+    state: present
+  ignore_errors: true
+
 - name: Install Nerd Font
   homebrew_cask:
     name:
